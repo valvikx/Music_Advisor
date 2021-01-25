@@ -1,4 +1,4 @@
-package advisor.constant;
+package advisor.view;
 
 public class Messages {
 

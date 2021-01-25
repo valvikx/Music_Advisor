@@ -20,7 +20,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static advisor.constant.Messages.UNKNOWN_CATEGORY_NAME;
+import static advisor.view.Messages.UNKNOWN_CATEGORY_NAME;
 
 public class Repository implements IRepository {
 

@@ -7,7 +7,7 @@ import advisor.model.Model;
 import advisor.repository.IRepository;
 import advisor.repository.impl.Repository;
 
-import static advisor.constant.Messages.NO_MORE_PAGES;
+import static advisor.view.Messages.NO_MORE_PAGES;
 
 public abstract class CommandImpl implements ICommand {
 

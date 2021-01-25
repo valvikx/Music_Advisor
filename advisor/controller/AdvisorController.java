@@ -1,14 +1,13 @@
 package advisor.controller;
 
 import advisor.command.Command;
-import advisor.exception.AdvisorException;
 import advisor.model.Model;
 import advisor.repository.impl.Repository;
 import advisor.view.Console;
 
 import java.util.Locale;
 
-import static advisor.constant.Messages.*;
+import static advisor.view.Messages.*;
 
 public class AdvisorController {
 

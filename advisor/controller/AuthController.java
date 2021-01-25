@@ -7,7 +7,7 @@ import advisor.repository.impl.Repository;
 import advisor.uri.UriBuilder;
 import advisor.view.Console;
 
-import static advisor.constant.Messages.*;
+import static advisor.view.Messages.*;
 
 public class AuthController {
 

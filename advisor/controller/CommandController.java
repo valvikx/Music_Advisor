@@ -9,8 +9,8 @@ import advisor.view.Console;
 
 import java.util.Map;
 
-import static advisor.constant.Messages.INVALID_COMMAND_ARGUMENTS;
-import static advisor.constant.Messages.PAGE;
+import static advisor.view.Messages.INVALID_COMMAND_ARGUMENTS;
+import static advisor.view.Messages.PAGE;
 
 public class CommandController {
 

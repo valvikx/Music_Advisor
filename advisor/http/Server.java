@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import static advisor.constant.Messages.CODE_NOT_FOUND;
-import static advisor.constant.Messages.GOT_THE_CODE;
+import static advisor.view.Messages.CODE_NOT_FOUND;
+import static advisor.view.Messages.GOT_THE_CODE;
 import static advisor.controller.AuthController.CODE_KEY;
 
 public class Server {
