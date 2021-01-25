@@ -1,6 +1,7 @@
 package advisor.controller;
 
 import advisor.command.Command;
+import advisor.exception.AdvisorException;
 import advisor.model.Model;
 import advisor.repository.impl.Repository;
 import advisor.view.Console;
@@ -27,6 +28,10 @@ public class AdvisorController {
 
         while (true) {
 
+            // query command: [command name (required)] [category name (required for playlists)] [-page (optional)]
+            // query command example: new
+            // query command example: categories -page 10
+            // query command example: playlists Hip Hop -page 10
             String[] commandArgs = console.getCommandArgs();
 
             if (isValid(commandArgs)) {
@@ -73,36 +78,28 @@ public class AdvisorController {
 
             command = Command.valueOf(commandArgs[0].toUpperCase(Locale.ROOT));
 
-            if (command.equals(Command.PLAYLISTS) && commandArgs.length == 1) {
+            if (commandArgs.length == 2 && commandArgs[1].contains("-page")) {
 
-                throw new IllegalArgumentException(INVALID_COMMAND_ARGUMENTS);
+                String[] args = commandArgs[1].split("-page");
+
+                if (!args[0].isEmpty()) {
+
+                    // query command example: playlists CATEGORY_NAME -page 10
+                    model.addAttribute("categoryName", args[0].trim());
+
+                }
+
+                // query command example: new -page 10
+                model.setLimit(Integer.parseInt(args[1].trim()));
+
+            } else if (commandArgs.length == 2 && command.equals(Command.PLAYLISTS)) {
+
+                // query command example: playlists Hip Hop
+                model.addAttribute("categoryName", commandArgs[1]);
 
             } else if (commandArgs.length == 2) {
 
-                String[] tokens = commandArgs[1].split("\\s+");
-
-                // command args example: [new -page 10]
-                if ("-page".equals(tokens[0]) && tokens.length == 2) {
-
-                    model.setLimit(Integer.parseInt(tokens[1]));
-
-                } else if (command.equals(Command.PLAYLISTS)) {
-
-                    // command args example: [playlists CATEGORY_NAME]
-                    model.addAttribute("categoryName", tokens[0]);
-
-                    // command args example: [playlists CATEGORY_NAME -page 10]
-                    if (tokens.length == 3) {
-
-                        model.setLimit(Integer.parseInt(tokens[2]));
-
-                    }
-
-                } else {
-
-                    throw new IllegalArgumentException(INVALID_COMMAND_ARGUMENTS);
-
-                }
+                throw new IllegalArgumentException();
 
             }
 

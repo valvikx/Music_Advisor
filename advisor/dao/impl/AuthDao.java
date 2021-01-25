@@ -1,13 +1,13 @@
 package advisor.dao.impl;
 
-import advisor.dao.IJsonDao;
+import advisor.dao.IAuthDao;
 import advisor.exception.AdvisorException;
 import advisor.http.Client;
 import advisor.json.JsonHelper;
 
 import java.util.Map;
 
-public class JsonDao implements IJsonDao {
+public class AuthDao implements IAuthDao {
 
     private final Client client = Client.getInstance();
 
@@ -49,7 +49,7 @@ public class JsonDao implements IJsonDao {
 
     private void validate(String json) throws AdvisorException {
 
-        jsonHelper.buildJson(json);
+        jsonHelper.buildDOM(json);
 
         if (jsonHelper.hasMember("error")) {
 

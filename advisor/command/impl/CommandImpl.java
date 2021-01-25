@@ -4,13 +4,14 @@ import advisor.command.Command;
 import advisor.command.ICommand;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
+import advisor.repository.IRepository;
 import advisor.repository.impl.Repository;
 
 import static advisor.constant.Messages.NO_MORE_PAGES;
 
 public abstract class CommandImpl implements ICommand {
 
-    protected final Repository repository;
+    protected final IRepository repository;
 
     public CommandImpl(Repository repository) {
 
@@ -48,9 +49,9 @@ public abstract class CommandImpl implements ICommand {
 
     protected void setPagingUrls(Model model) {
 
-        model.addAttribute("prevUrl", repository.getPrevUrl());
+        model.addAttribute("prevUrl", repository.getPrevious());
 
-        model.addAttribute("nextUrl", repository.getNextUrl());
+        model.addAttribute("nextUrl", repository.getNext());
     }
 
     protected void setPageParameters(Model model) {

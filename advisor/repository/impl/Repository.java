@@ -1,7 +1,9 @@
 package advisor.repository.impl;
 
+import advisor.dao.IAuthDao;
+import advisor.dao.IEntryDao;
 import advisor.dao.impl.EntryDao;
-import advisor.dao.impl.JsonDao;
+import advisor.dao.impl.AuthDao;
 import advisor.domain.Album;
 import advisor.domain.Category;
 import advisor.domain.Playlist;
@@ -22,9 +24,9 @@ import static advisor.constant.Messages.UNKNOWN_CATEGORY_NAME;
 
 public class Repository implements IRepository {
 
-    private final JsonDao jsonDao = new JsonDao();
+    private final IAuthDao authDao = new AuthDao();
 
-    private final EntryDao entryDao = new EntryDao();
+    private final IEntryDao entryDao = new EntryDao();
 
     private final JsonHelper jsonHelper = JsonHelper.getInstance();
 
@@ -37,7 +39,7 @@ public class Repository implements IRepository {
 
         String query = UriBuilder.getRequestToAccessTokens(authorizationCode);
 
-        Map<String, String> jsonMembers = jsonDao.getMembers(url, query);
+        Map<String, String> jsonMembers = authDao.getMembers(url, query);
 
         return jsonMembers.get("tokenType") + " " + jsonMembers.get("accessToken");
 
@@ -121,15 +123,15 @@ public class Repository implements IRepository {
 
     }
 
-    public String getPrevUrl() {
+    public String getPrevious() {
 
-        return entryDao.getPrevUrl();
+        return entryDao.getPrevious();
 
     }
 
-    public String getNextUrl() {
+    public String getNext() {
 
-        return entryDao.getNextUrl();
+        return entryDao.getNext();
 
     }
 

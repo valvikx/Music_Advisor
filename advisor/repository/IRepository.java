@@ -28,4 +28,12 @@ public interface IRepository {
                                         String authorizationHeader,
                                         String categoryName) throws AdvisorException;
 
+    String getPrevious();
+
+    String getNext();
+
+    int getTotal();
+
+    int getOffset();
+
 }

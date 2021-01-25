@@ -19,7 +19,7 @@ public class JsonHelper {
 
     }
 
-    public void buildJson(String json) {
+    public void buildDOM(String json) {
 
         jsonObject = JsonParser.parseString(json).getAsJsonObject();
 

@@ -7,10 +7,10 @@ public class UriBuilder {
     private static final String API_HOST = "https://api.spotify.com";
 
     // should be replaced with an actual one
-    private static final String CLIENT_ID = "a19ee7dbfda443b2a8150c9101bfd645";
+    private static final String CLIENT_ID = "8be3d324da104f468738b01ee36f4e12";
 
     // should be replaced with an actual one
-    private static final String CLIENT_SECRET = "a19ee7dbfda443b2a8150c9101bfd645";
+    private static final String CLIENT_SECRET = "84e048bbbb3b497d84b96bb132f53607";
 
     private static final String REDIRECT_URI = "http://localhost:8080";
 

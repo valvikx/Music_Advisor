@@ -18,14 +18,15 @@ public class EntryDao implements IEntryDao {
 
     private final JsonHelper jsonHelper = JsonHelper.getInstance();
 
-    private String nextUrl;
+    private String next;
 
-    private String prevUrl;
+    private String previous;
 
     private int total;
 
     private int offset;
 
+    @Override
     public void buildJson(String url, String authorizationHeader) throws AdvisorException {
 
         try {
@@ -47,9 +48,9 @@ public class EntryDao implements IEntryDao {
 
         jsonHelper.setJsonObject(pagingObject);
 
-        prevUrl = getValueOfPrev();
+        previous = getValueOfPrev();
 
-        nextUrl = getValueOfNext();
+        next = getValueOfNext();
 
         total = getValueOfTotal();
 
@@ -62,15 +63,15 @@ public class EntryDao implements IEntryDao {
 
     }
 
-    public String getNextUrl() {
+    public String getNext() {
 
-        return nextUrl;
+        return next;
 
     }
 
-    public String getPrevUrl() {
+    public String getPrevious() {
 
-        return prevUrl;
+        return previous;
 
     }
 
@@ -88,7 +89,7 @@ public class EntryDao implements IEntryDao {
 
     private void validate(String json) throws AdvisorException {
 
-        jsonHelper.buildJson(json);
+        jsonHelper.buildDOM(json);
 
         if (jsonHelper.hasMember("error")) {
 
