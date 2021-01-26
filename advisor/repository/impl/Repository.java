@@ -122,25 +122,28 @@ public class Repository implements IRepository {
         return getPlaylistList(authorizationHeader, url);
 
     }
-
+    @Override
     public String getPrevious() {
 
         return entryDao.getPrevious();
 
     }
 
+    @Override
     public String getNext() {
 
         return entryDao.getNext();
 
     }
 
+    @Override
     public int getTotal() {
 
         return entryDao.getTotal();
 
     }
 
+    @Override
     public int getOffset() {
 
         return entryDao.getOffset();

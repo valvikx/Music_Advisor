@@ -63,24 +63,28 @@ public class EntryDao implements IEntryDao {
 
     }
 
+    @Override
     public String getNext() {
 
         return next;
 
     }
 
+    @Override
     public String getPrevious() {
 
         return previous;
 
     }
 
+    @Override
     public int getTotal() {
 
         return total;
 
     }
 
+    @Override
     public int getOffset() {
 
         return offset;

@@ -6,9 +6,9 @@ public class Album extends Playlist {
 
     private final List<String> artists;
 
-    public Album(String id, String name, String spotifyURL, List<String> artists) {
+    public Album(String id, String name, String externalUrl, List<String> artists) {
 
-        super(id, name, spotifyURL);
+        super(id, name, externalUrl);
 
         this.artists = artists;
 
