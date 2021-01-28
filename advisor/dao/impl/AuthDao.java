@@ -3,7 +3,7 @@ package advisor.dao.impl;
 import advisor.dao.IAuthDao;
 import advisor.exception.AdvisorException;
 import advisor.http.Client;
-import advisor.json.JsonHelper;
+import advisor.json.JsonDocument;
 
 import java.util.Map;
 
@@ -11,10 +11,10 @@ public class AuthDao implements IAuthDao {
 
     private final Client client = Client.getInstance();
 
-    private final JsonHelper jsonHelper = JsonHelper.getInstance();
+    private final JsonDocument jsonDocument = JsonDocument.getInstance();
 
     @Override
-    public Map<String, String> getMembers(String url, String query) throws AdvisorException {
+    public Map<String, String> getParams(String url, String query) throws AdvisorException {
 
         try {
 
@@ -22,8 +22,8 @@ public class AuthDao implements IAuthDao {
 
             validate(json);
 
-            return Map.of("accessToken", jsonHelper.getStringValue("access_token"),
-                          "tokenType", jsonHelper.getStringValue("token_type"));
+            return Map.of("accessToken", jsonDocument.getStringValue("access_token"),
+                          "tokenType", jsonDocument.getStringValue("token_type"));
 
         } catch (AdvisorException e) {
 
@@ -49,11 +49,11 @@ public class AuthDao implements IAuthDao {
 
     private void validate(String json) throws AdvisorException {
 
-        jsonHelper.buildDOM(json);
+        jsonDocument.buildDOM(json);
 
-        if (jsonHelper.hasMember("error")) {
+        if (jsonDocument.hasMember("error")) {
 
-            throw new AdvisorException(jsonHelper.getStringValue("error_description"));
+            throw new AdvisorException(jsonDocument.getStringValue("error_description"));
 
         }
 

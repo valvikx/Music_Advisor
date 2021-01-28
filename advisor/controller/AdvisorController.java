@@ -2,7 +2,7 @@ package advisor.controller;
 
 import advisor.command.Command;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 import advisor.view.Console;
 
 import java.util.Locale;
@@ -11,7 +11,7 @@ import static advisor.view.Messages.*;
 
 public class AdvisorController {
 
-    private final Repository repository = new Repository();
+    private final AdvisorRepository advisorRepository = new AdvisorRepository();
 
     private final Model model = new Model();
 
@@ -21,9 +21,9 @@ public class AdvisorController {
 
     public void letsGo() {
 
-        AuthController authController = new AuthController(repository);
+        AuthController authController = new AuthController(advisorRepository);
 
-        CommandController commandController = new CommandController(repository);
+        CommandController commandController = new CommandController(advisorRepository);
 
         while (true) {
 

@@ -3,7 +3,7 @@ package advisor.controller;
 import advisor.exception.AdvisorException;
 import advisor.http.Server;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 import advisor.uri.UriBuilder;
 import advisor.view.Console;
 
@@ -11,17 +11,15 @@ import static advisor.view.Messages.*;
 
 public class AuthController {
 
-    public static final String CODE_KEY = "code";
-
     private final Server server = new Server();
 
     private final Console console = Console.getInstance();
 
-    private final Repository repository;
+    private final AdvisorRepository advisorRepository;
 
-    public AuthController(Repository repository) {
+    public AuthController(AdvisorRepository advisorRepository) {
 
-        this.repository = repository;
+        this.advisorRepository = advisorRepository;
 
     }
 
@@ -43,13 +41,13 @@ public class AuthController {
 
             server.stop();
 
-            if (server.getQuery() != null && server.getQuery().contains(CODE_KEY)) {
+            if (server.getQuery() != null && server.getQuery().contains(CODE)) {
 
                 console.displayMessage(CODE_RECEIVED);
                 
             } else {
 
-                throw new AdvisorException(ACCESS_DENIED);
+                throw new AdvisorException("Access denied");
 
             }
 
@@ -57,12 +55,11 @@ public class AuthController {
 
             String code = getCode(server.getQuery());
 
-            model.addAttribute("authorizationHeader", repository.getAuthorizationHeader(code));
+            model.addAttribute("authorizationHeader", advisorRepository.getAuthorizationHeader(code));
 
             model.setAuthorized(true);
 
             console.displayMessage(SUCCESS);
-
 
         } catch (Exception e) {
 

@@ -4,15 +4,15 @@ import advisor.command.Command;
 import advisor.domain.Category;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
 public class CategoriesCommand extends CommandImpl {
 
-    public CategoriesCommand(Repository repository) {
+    public CategoriesCommand(AdvisorRepository advisorRepository) {
 
-        super(repository);
+        super(advisorRepository);
 
     }
 
@@ -27,9 +27,7 @@ public class CategoriesCommand extends CommandImpl {
 
         model.setEntries(categories);
 
-        setPagingUrls(model);
-
-        setPageParameters(model);
+        setPageParams(model);
 
         model.setExecute(true);
 

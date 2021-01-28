@@ -12,10 +12,6 @@ public class Messages {
 
     public static final String GOT_THE_CODE = "Got the code. Return back to your program.";
 
-    public static final String ACCESS_DENIED = "Access denied";
-
-    public static final String NO_MORE_PAGES = "No more pages.";
-
     public static final String PAGE = "---PAGE %s OF %s---";
 
     public static final String UNKNOWN_CATEGORY_NAME = "Unknown category name.";
@@ -28,5 +24,7 @@ public class Messages {
     public static final String MAKING_HTTP_REQUEST = "Making http request for access_token...";
 
     public static final String SUCCESS = "Success!";
+
+    public static final String CODE = "code";
 
 }

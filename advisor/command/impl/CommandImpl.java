@@ -5,17 +5,15 @@ import advisor.command.ICommand;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
 import advisor.repository.IRepository;
-import advisor.repository.impl.Repository;
-
-import static advisor.view.Messages.NO_MORE_PAGES;
+import advisor.repository.impl.AdvisorRepository;
 
 public abstract class CommandImpl implements ICommand {
 
     protected final IRepository repository;
 
-    public CommandImpl(Repository repository) {
+    public CommandImpl(AdvisorRepository advisorRepository) {
 
-        this.repository = repository;
+        this.repository = advisorRepository;
 
     }
 
@@ -31,15 +29,15 @@ public abstract class CommandImpl implements ICommand {
 
     }
 
-    protected String getPagingUrl(Model model, Command pagingCommand) throws AdvisorException {
+    protected String getPagingUrl(Model model,
+                                  Command pagingCommand) throws AdvisorException {
 
-        String pagingUrl = pagingCommand.equals(Command.NEXT)
-                                            ? model.getAttribute("nextUrl")
-                                            : model.getAttribute("prevUrl");
+        String pagingUrl = pagingCommand.equals(Command.NEXT) ? model.getAttribute("next")
+                                                              : model.getAttribute("previous");
 
         if (model.isExecute() && pagingUrl == null) {
 
-            throw new AdvisorException(NO_MORE_PAGES);
+            throw new AdvisorException("No more pages.");
 
         }
 
@@ -47,14 +45,11 @@ public abstract class CommandImpl implements ICommand {
 
     }
 
-    protected void setPagingUrls(Model model) {
+    protected void setPageParams(Model model) {
 
-        model.addAttribute("prevUrl", repository.getPrevious());
+        model.addAttribute("previous", repository.getPrevious());
 
-        model.addAttribute("nextUrl", repository.getNext());
-    }
-
-    protected void setPageParameters(Model model) {
+        model.addAttribute("next", repository.getNext());
 
         int currentPage = repository.getOffset() / model.getLimit() + 1;
 

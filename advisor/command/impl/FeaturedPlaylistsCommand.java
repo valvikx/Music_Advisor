@@ -4,15 +4,15 @@ import advisor.command.Command;
 import advisor.domain.Playlist;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
 public class FeaturedPlaylistsCommand extends CommandImpl {
 
-    public FeaturedPlaylistsCommand(Repository repository) {
+    public FeaturedPlaylistsCommand(AdvisorRepository advisorRepository) {
 
-        super(repository);
+        super(advisorRepository);
 
     }
 
@@ -28,9 +28,7 @@ public class FeaturedPlaylistsCommand extends CommandImpl {
 
         model.setEntries(featuredPlaylists);
 
-        setPagingUrls(model);
-
-        setPageParameters(model);
+        setPageParams(model);
 
         model.setExecute(true);
 

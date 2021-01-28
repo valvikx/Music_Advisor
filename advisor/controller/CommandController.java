@@ -4,7 +4,7 @@ import advisor.command.Command;
 import advisor.command.impl.*;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 import advisor.view.Console;
 
 import java.util.Map;
@@ -20,12 +20,12 @@ public class CommandController {
 
     private Command executeCommand;
 
-    public CommandController(Repository repository) {
+    public CommandController(AdvisorRepository advisorRepository) {
 
-        commandFactory = Map.of(Command.NEW, new NewReleasesCommand(repository),
-                                Command.FEATURED, new FeaturedPlaylistsCommand(repository),
-                                Command.CATEGORIES, new CategoriesCommand(repository),
-                                Command.PLAYLISTS, new PlaylistsCommand(repository));
+        commandFactory = Map.of(Command.NEW, new NewReleasesCommand(advisorRepository),
+                                Command.FEATURED, new FeaturedPlaylistsCommand(advisorRepository),
+                                Command.CATEGORIES, new CategoriesCommand(advisorRepository),
+                                Command.PLAYLISTS, new PlaylistsCommand(advisorRepository));
     }
 
     public void execute(Command command, Model model) {
@@ -38,9 +38,9 @@ public class CommandController {
 
                 executeCommand = command;
 
-                model.addAttribute("nextUrl", null);
+                model.addAttribute("next", null);
 
-                model.addAttribute("prevUrl", null);
+                model.addAttribute("previous", null);
 
                 model.setExecute(false);
 

@@ -4,15 +4,15 @@ import advisor.command.Command;
 import advisor.domain.Playlist;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
 public class PlaylistsCommand extends CommandImpl {
 
-    public PlaylistsCommand(Repository repository) {
+    public PlaylistsCommand(AdvisorRepository advisorRepository) {
 
-        super(repository);
+        super(advisorRepository);
 
     }
 
@@ -31,9 +31,7 @@ public class PlaylistsCommand extends CommandImpl {
 
         model.setEntries(categoryPlaylists);
 
-        setPagingUrls(model);
-
-        setPageParameters(model);
+        setPageParams(model);
 
         model.setExecute(true);
 

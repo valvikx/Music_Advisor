@@ -8,7 +8,7 @@ import advisor.domain.Album;
 import advisor.domain.Category;
 import advisor.domain.Playlist;
 import advisor.exception.AdvisorException;
-import advisor.json.JsonHelper;
+import advisor.json.JsonDocument;
 import advisor.repository.IRepository;
 import advisor.uri.UriBuilder;
 import com.google.gson.JsonArray;
@@ -16,19 +16,20 @@ import com.google.gson.JsonElement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static advisor.view.Messages.UNKNOWN_CATEGORY_NAME;
 
-public class Repository implements IRepository {
+public class AdvisorRepository implements IRepository {
 
     private final IAuthDao authDao = new AuthDao();
 
     private final IEntryDao entryDao = new EntryDao();
 
-    private final JsonHelper jsonHelper = JsonHelper.getInstance();
+    private final JsonDocument jsonDocument = JsonDocument.getInstance();
 
     private String url;
 
@@ -39,9 +40,9 @@ public class Repository implements IRepository {
 
         String query = UriBuilder.getRequestToAccessTokens(authorizationCode);
 
-        Map<String, String> jsonMembers = authDao.getMembers(url, query);
+        Map<String, String> params = authDao.getParams(url, query);
 
-        return jsonMembers.get("tokenType") + " " + jsonMembers.get("accessToken");
+        return params.get("tokenType") + " " + params.get("accessToken");
 
     }
 
@@ -52,12 +53,12 @@ public class Repository implements IRepository {
 
         url = pagingUrl == null ? UriBuilder.getUrlTo("new-releases", limit) : pagingUrl;
 
-        entryDao.buildJson(url, authorizationHeader);
+        entryDao.createNewJson(url, authorizationHeader);
 
-        Function<JsonElement, Album> convertor = je -> new Album(getValueOfId(je),
-                                                                 getValueOfName(je),
-                                                                 getValueOfExternalUrl(je),
-                                                                 getValuesOfArtists(je));
+        Function<JsonElement, Album> convertor = je -> new Album(getIdValue(je),
+                                                                 getNameValue(je),
+                                                                 getVExternalUrlalue(je),
+                                                                 getArtistsValues(je));
 
         return entryDao.getEntries("albums", convertor);
 
@@ -81,10 +82,10 @@ public class Repository implements IRepository {
 
         url = pagingUrl == null ? UriBuilder.getUrlTo("categories", limit) : pagingUrl;
 
-        entryDao.buildJson(url, authorizationHeader);
+        entryDao.createNewJson(url, authorizationHeader);
 
-        Function<JsonElement, Category> convertor = je -> new Category(getValueOfId(je),
-                                                                       getValueOfName(je));
+        Function<JsonElement, Category> convertor = je -> new Category(getIdValue(je),
+                                                                       getNameValue(je));
 
         return entryDao.getEntries("categories", convertor);
 
@@ -152,46 +153,43 @@ public class Repository implements IRepository {
 
     private List<Playlist> getPlaylistList(String authorizationHeader, String url) throws AdvisorException {
 
-        entryDao.buildJson(url, authorizationHeader);
+        entryDao.createNewJson(url, authorizationHeader);
 
-        Function<JsonElement, Playlist> convertor = je -> new Playlist(getValueOfId(je),
-                                                                       getValueOfName(je),
-                                                                       getValueOfExternalUrl(je));
+        Function<JsonElement, Playlist> convertor = je -> new Playlist(getIdValue(je),
+                                                                       getNameValue(je),
+                                                                       getVExternalUrlalue(je));
 
         return entryDao.getEntries("playlists", convertor);
 
     }
 
-    private List<String> getValuesOfArtists(JsonElement jsonElement) {
+    private List<String> getArtistsValues(JsonElement jsonElement) {
 
-        return serializeArtists(jsonHelper
+        return serializeArtists(jsonDocument
                                     .setJsonObject(jsonElement)
                                     .getJsonArray("artists"));
 
     }
 
-    private String getValueOfName(JsonElement jsonElement) {
+    private String getNameValue(JsonElement jsonElement) {
 
-        return jsonHelper
-                    .setJsonObject(jsonElement)
-                    .getStringValue("name");
-
-    }
-
-    private String getValueOfId(JsonElement jsonElement) {
-
-        return jsonHelper
-                    .setJsonObject(jsonElement)
-                    .getStringValue("id");
+        return jsonDocument.setJsonObject(jsonElement)
+                           .getStringValue("name");
 
     }
 
-    private String getValueOfExternalUrl(JsonElement jsonElement) {
+    private String getIdValue(JsonElement jsonElement) {
 
-        return jsonHelper
-                    .setJsonObject(jsonElement)
-                    .setJsonObject("external_urls")
-                    .getStringValue("spotify");
+        return jsonDocument.setJsonObject(jsonElement)
+                           .getStringValue("id");
+
+    }
+
+    private String getVExternalUrlalue(JsonElement jsonElement) {
+
+        return jsonDocument.setJsonObject(jsonElement)
+                           .setJsonObject("external_urls")
+                           .getStringValue("spotify");
 
     }
 
@@ -199,20 +197,20 @@ public class Repository implements IRepository {
 
         return StreamSupport
                         .stream(artists.spliterator(), false)
-                        .map(this::getValueOfName)
+                        .map(this::getNameValue)
                         .collect(Collectors.toList());
 
     }
 
     private String getCategoryId(List<Category> categories, String categoryName) {
 
-        Category category = categories
-                                .stream()
-                                .filter(obj -> obj.getName().equals(categoryName))
-                                .findFirst()
-                                .orElse(null);
+        Optional<String> categoryId = categories
+                                        .stream()
+                                        .filter(obj -> obj.getName().equals(categoryName))
+                                        .map(Category::getId)
+                                        .findFirst();
 
-        return category != null ? category.getId() : null;
+        return categoryId.orElse(null);
 
     }
 

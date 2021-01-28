@@ -5,15 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class JsonHelper {
+public class JsonDocument {
 
-    private static final JsonHelper INSTANCE = new JsonHelper();
+    private static final JsonDocument INSTANCE = new JsonDocument();
 
     private JsonObject jsonObject;
 
-    private JsonHelper() {}
+    private JsonDocument() {}
 
-    public static JsonHelper getInstance() {
+    public static JsonDocument getInstance() {
 
         return INSTANCE;
 
@@ -25,7 +25,7 @@ public class JsonHelper {
 
     }
 
-    public JsonHelper setJsonObject(String objectName) {
+    public JsonDocument setJsonObject(String objectName) {
 
         jsonObject = jsonObject.getAsJsonObject(objectName);
 
@@ -33,7 +33,7 @@ public class JsonHelper {
 
     }
 
-    public JsonHelper setJsonObject(JsonElement jsonElement) {
+    public JsonDocument setJsonObject(JsonElement jsonElement) {
 
         jsonObject = jsonElement.getAsJsonObject();
 
@@ -65,10 +65,11 @@ public class JsonHelper {
 
     }
 
-    public boolean isMemberNull(String memberName) {
+    public String getNullableStringValue(String memberName) {
 
-        return jsonObject.get(memberName).isJsonNull();
-
+        return jsonObject.get(memberName).isJsonNull()
+                                                ? null
+                                                : getStringValue(memberName);
     }
 
 }

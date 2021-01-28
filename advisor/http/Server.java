@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
-import static advisor.view.Messages.CODE_NOT_FOUND;
-import static advisor.view.Messages.GOT_THE_CODE;
-import static advisor.controller.AuthController.CODE_KEY;
+import static advisor.view.Messages.*;
 
 public class Server {
 
@@ -30,9 +28,8 @@ public class Server {
 
                                 query = uri.getQuery();
 
-                                String response = query == null || !query.contains(CODE_KEY)
-                                                                                      ? CODE_NOT_FOUND
-                                                                                      : GOT_THE_CODE;
+                                String response = query == null ||
+                                                  !query.contains(CODE) ? CODE_NOT_FOUND : GOT_THE_CODE;
 
                                 httpExchange.sendResponseHeaders(STATUS_OK, response.length());
 

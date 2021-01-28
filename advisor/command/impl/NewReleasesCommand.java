@@ -4,15 +4,15 @@ import advisor.command.Command;
 import advisor.domain.Album;
 import advisor.exception.AdvisorException;
 import advisor.model.Model;
-import advisor.repository.impl.Repository;
+import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
 public class NewReleasesCommand extends CommandImpl {
 
-    public NewReleasesCommand(Repository repository) {
+    public NewReleasesCommand(AdvisorRepository advisorRepository) {
 
-        super(repository);
+        super(advisorRepository);
 
     }
 
@@ -27,9 +27,7 @@ public class NewReleasesCommand extends CommandImpl {
 
         model.setEntries(newReleases);
 
-        setPagingUrls(model);
-
-        setPageParameters(model);
+        setPageParams(model);
 
         model.setExecute(true);
 

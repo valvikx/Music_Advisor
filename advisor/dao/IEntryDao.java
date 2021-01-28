@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public interface IEntryDao {
 
-    void buildJson(String url, String authorizationHeader) throws AdvisorException;
+    void createNewJson(String url, String authorizationHeader) throws AdvisorException;
 
     <T> List<T> getEntries(String pagingObject,
                            Function<JsonElement, T> converter) throws AdvisorException;

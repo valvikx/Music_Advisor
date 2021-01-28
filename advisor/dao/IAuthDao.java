@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface IAuthDao {
 
-    Map<String, String> getMembers(String url, String query) throws AdvisorException;
+    Map<String, String> getParams(String url, String query) throws AdvisorException;
 
 }

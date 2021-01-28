@@ -3,7 +3,7 @@ package advisor.dao.impl;
 import advisor.dao.IEntryDao;
 import advisor.exception.AdvisorException;
 import advisor.http.Client;
-import advisor.json.JsonHelper;
+import advisor.json.JsonDocument;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
@@ -16,7 +16,7 @@ public class EntryDao implements IEntryDao {
 
     private final Client client = Client.getInstance();
 
-    private final JsonHelper jsonHelper = JsonHelper.getInstance();
+    private final JsonDocument jsonDocument = JsonDocument.getInstance();
 
     private String next;
 
@@ -27,11 +27,11 @@ public class EntryDao implements IEntryDao {
     private int offset;
 
     @Override
-    public void buildJson(String url, String authorizationHeader) throws AdvisorException {
+    public void createNewJson(String url, String authorizationHeader) throws AdvisorException {
 
         try {
 
-            String json = client.get(url, authorizationHeader);
+            String json = getJson(url, authorizationHeader);
 
             validate(json);
 
@@ -46,20 +46,19 @@ public class EntryDao implements IEntryDao {
     @Override
     public <T> List<T> getEntries(String pagingObject, Function<JsonElement, T> converter) {
 
-        jsonHelper.setJsonObject(pagingObject);
+        jsonDocument.setJsonObject(pagingObject);
 
-        previous = getValueOfPrev();
+        previous = jsonDocument.getNullableStringValue("previous");
 
-        next = getValueOfNext();
+        next = jsonDocument.getNullableStringValue("next");
 
-        total = getValueOfTotal();
+        total = jsonDocument.getIntValue("total");
 
-        offset = getValueOfOffset();
+        offset = jsonDocument.getIntValue("offset");
 
-        JsonArray items = jsonHelper.getJsonArray("items");
+        JsonArray items = jsonDocument.getJsonArray("items");
 
         return serializeItems(items, converter);
-
 
     }
 
@@ -91,15 +90,28 @@ public class EntryDao implements IEntryDao {
 
     }
 
+    private String getJson(String url, String authorizationHeader) throws AdvisorException {
+
+        try {
+
+            return client.get(url, authorizationHeader);
+
+        } catch (Exception e) {
+
+            throw new AdvisorException(e.getMessage());
+
+        }
+
+    }
+
     private void validate(String json) throws AdvisorException {
 
-        jsonHelper.buildDOM(json);
+        jsonDocument.buildDOM(json);
 
-        if (jsonHelper.hasMember("error")) {
+        if (jsonDocument.hasMember("error")) {
 
-            throw new AdvisorException(jsonHelper
-                                            .setJsonObject("error")
-                                            .getStringValue("message"));
+            throw new AdvisorException(jsonDocument.setJsonObject("error")
+                                                   .getStringValue("message"));
 
         }
 
@@ -107,39 +119,9 @@ public class EntryDao implements IEntryDao {
 
     private <T> List<T> serializeItems(JsonArray items, Function<JsonElement, T> converter) {
 
-        return StreamSupport
-                        .stream(items.spliterator(), false)
-                        .map(converter)
-                        .collect(Collectors.toList());
-
-
-    }
-
-    private String getValueOfNext() {
-
-        return jsonHelper.isMemberNull("next")
-                                        ? null
-                                        : jsonHelper.getStringValue("next");
-
-    }
-
-    private String getValueOfPrev() {
-
-        return jsonHelper.isMemberNull("previous")
-                            ? null
-                            : jsonHelper.getStringValue("previous");
-
-    }
-
-    private int getValueOfTotal() {
-
-        return jsonHelper.getIntValue("total");
-
-    }
-
-    private int getValueOfOffset() {
-
-        return jsonHelper.getIntValue("offset");
+        return StreamSupport.stream(items.spliterator(), false)
+                            .map(converter)
+                            .collect(Collectors.toList());
 
     }
 
