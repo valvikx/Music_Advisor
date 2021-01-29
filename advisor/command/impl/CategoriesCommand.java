@@ -8,7 +8,7 @@ import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
-public class CategoriesCommand extends CommandImpl {
+public class CategoriesCommand extends AbstractCommand {
 
     public CategoriesCommand(AdvisorRepository advisorRepository) {
 

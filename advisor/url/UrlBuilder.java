@@ -1,6 +1,6 @@
-package advisor.uri;
+package advisor.url;
 
-public class UriBuilder {
+public class UrlBuilder {
 
     private static final String ACCOUNTS_HOST = "https://accounts.spotify.com";
 
@@ -16,7 +16,7 @@ public class UriBuilder {
 
     private final StringBuilder uri;
 
-    public UriBuilder() {
+    public UrlBuilder() {
 
         this.uri = new StringBuilder();
 
@@ -24,7 +24,7 @@ public class UriBuilder {
 
     public static String getUrlToAuthorizationCode() {
 
-        return new UriBuilder()
+        return new UrlBuilder()
                         .addHost(ACCOUNTS_HOST)
                         .addPath("authorize")
                         .query()
@@ -37,7 +37,7 @@ public class UriBuilder {
 
     public static String getUrlToAccessTokens() {
 
-        return new UriBuilder()
+        return new UrlBuilder()
                             .addHost(ACCOUNTS_HOST)
                             .addPath("api")
                             .addPath("token")
@@ -47,7 +47,7 @@ public class UriBuilder {
 
     public static String getRequestToAccessTokens(String authorizationCode) {
 
-        return new UriBuilder()
+        return new UrlBuilder()
                         .addQueryParameter("grant_type", "authorization_code")
                         .addQueryParameter("code", authorizationCode)
                         .addQueryParameter("redirect_uri", REDIRECT_URI)
@@ -77,9 +77,9 @@ public class UriBuilder {
 
     }
 
-    private static UriBuilder buildBrowseTabUri(String path) {
+    private static UrlBuilder buildBrowseTabUri(String path) {
 
-        return new UriBuilder()
+        return new UrlBuilder()
                         .addHost(API_HOST)
                         .addPath("v1")
                         .addPath("browse")
@@ -88,7 +88,7 @@ public class UriBuilder {
 
     }
 
-    private UriBuilder addHost(String host) {
+    private UrlBuilder addHost(String host) {
 
         uri.append(host);
 
@@ -96,7 +96,7 @@ public class UriBuilder {
 
     }
 
-    private UriBuilder addPath(String path) {
+    private UrlBuilder addPath(String path) {
 
         uri.append("/");
 
@@ -106,7 +106,7 @@ public class UriBuilder {
 
     }
 
-    private UriBuilder query() {
+    private UrlBuilder query() {
         
         uri.append("?");
 
@@ -114,7 +114,7 @@ public class UriBuilder {
 
     }
 
-    private UriBuilder addQueryParameter(String key, String value) {
+    private UrlBuilder addQueryParameter(String key, String value) {
 
         if (uri.toString().length() > 0) {
 

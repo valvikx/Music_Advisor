@@ -43,7 +43,7 @@ public class AdvisorController {
 
                     if (model.isAuthorized()) {
 
-                        console.displayMessage(ALREADY_LOGGED_IN);
+                        console.display(ALREADY_LOGGED_IN);
 
                         continue;
 
@@ -55,7 +55,7 @@ public class AdvisorController {
 
                     if (!model.isAuthorized()) {
 
-                        console.displayMessage(PROVIDE_ACCESS);
+                        console.display(PROVIDE_ACCESS);
 
                         continue;
 
@@ -106,7 +106,7 @@ public class AdvisorController {
 
         } catch (IllegalArgumentException e) {
 
-            console.displayMessage(INVALID_COMMAND_ARGUMENTS);
+            console.display(INVALID_COMMAND_ARGUMENTS);
 
         }
 

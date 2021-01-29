@@ -7,11 +7,11 @@ import advisor.model.Model;
 import advisor.repository.IRepository;
 import advisor.repository.impl.AdvisorRepository;
 
-public abstract class CommandImpl implements ICommand {
+public abstract class AbstractCommand implements ICommand {
 
     protected final IRepository repository;
 
-    public CommandImpl(AdvisorRepository advisorRepository) {
+    public AbstractCommand(AdvisorRepository advisorRepository) {
 
         this.repository = advisorRepository;
 

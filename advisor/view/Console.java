@@ -5,6 +5,8 @@ import advisor.domain.Category;
 import java.util.List;
 import java.util.Scanner;
 
+import static advisor.view.Messages.PAGE;
+
 public class Console {
 
     private static final Console INSTANCE = new Console();
@@ -26,21 +28,24 @@ public class Console {
 
     }
 
-    public void displayMessage(String message) {
+    public void display(String message) {
 
         System.out.println(message);
 
     }
 
-    public void displayMessage(String template, Object... arg) {
+    public void display(String template, Object... arg) {
 
         System.out.printf(template + '\n', arg);
 
     }
 
-    public void displayEntries(List<? extends Category> responseList) {
+    public void display(List<? extends Category> responseList,
+                        String currentPage, String totalPages) {
 
         responseList.forEach(obj -> System.out.println(obj.presentation()));
+
+        display(PAGE, currentPage, totalPages);
 
     }
 

@@ -8,7 +8,7 @@ import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
-public class PlaylistsCommand extends CommandImpl {
+public class PlaylistsCommand extends AbstractCommand {
 
     public PlaylistsCommand(AdvisorRepository advisorRepository) {
 

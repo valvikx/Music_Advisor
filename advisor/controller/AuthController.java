@@ -4,7 +4,7 @@ import advisor.exception.AdvisorException;
 import advisor.http.Server;
 import advisor.model.Model;
 import advisor.repository.impl.AdvisorRepository;
-import advisor.uri.UriBuilder;
+import advisor.url.UrlBuilder;
 import advisor.view.Console;
 
 import static advisor.view.Messages.*;
@@ -29,9 +29,9 @@ public class AuthController {
 
             server.start();
 
-            String url = UriBuilder.getUrlToAuthorizationCode();
+            String url = UrlBuilder.getUrlToAuthorizationCode();
 
-            console.displayMessage(USE_THIS_LINK, url);
+            console.display(USE_THIS_LINK, url);
 
             while (server.getQuery() == null) {
 
@@ -43,7 +43,7 @@ public class AuthController {
 
             if (server.getQuery() != null && server.getQuery().contains(CODE)) {
 
-                console.displayMessage(CODE_RECEIVED);
+                console.display(CODE_RECEIVED);
                 
             } else {
 
@@ -51,7 +51,7 @@ public class AuthController {
 
             }
 
-            console.displayMessage(MAKING_HTTP_REQUEST);
+            console.display(MAKING_HTTP_REQUEST);
 
             String code = getCode(server.getQuery());
 
@@ -59,11 +59,11 @@ public class AuthController {
 
             model.setAuthorized(true);
 
-            console.displayMessage(SUCCESS);
+            console.display(SUCCESS);
 
         } catch (Exception e) {
 
-            console.displayMessage(e.getMessage());
+            console.display(e.getMessage());
 
         }
 

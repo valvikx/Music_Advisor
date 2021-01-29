@@ -14,8 +14,6 @@ public class Messages {
 
     public static final String PAGE = "---PAGE %s OF %s---";
 
-    public static final String UNKNOWN_CATEGORY_NAME = "Unknown category name.";
-
     public static final String USE_THIS_LINK =
             "use this link to request the access code:\n%s\nwaiting for code...";
 

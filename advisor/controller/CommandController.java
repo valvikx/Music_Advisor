@@ -10,11 +10,10 @@ import advisor.view.Console;
 import java.util.Map;
 
 import static advisor.view.Messages.INVALID_COMMAND_ARGUMENTS;
-import static advisor.view.Messages.PAGE;
 
 public class CommandController {
 
-    private final Map<Command, CommandImpl> commandFactory;
+    private final Map<Command, AbstractCommand> commandFactory;
 
     private final Console console = Console.getInstance();
 
@@ -58,15 +57,13 @@ public class CommandController {
 
             commandFactory.get(executeCommand).execute(model, pagingCommand);
 
-            console.displayEntries(model.getEntries());
-
-            console.displayMessage(PAGE,
-                                   model.getAttribute("currentPage"),
-                                   model.getAttribute("totalPages"));
+            console.display(model.getEntries(),
+                            model.getAttribute("currentPage"),
+                            model.getAttribute("totalPages"));
 
         } catch (AdvisorException e) {
 
-            console.displayMessage(e.getMessage());
+            console.display(e.getMessage());
 
         }
 

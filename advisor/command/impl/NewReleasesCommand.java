@@ -8,7 +8,7 @@ import advisor.repository.impl.AdvisorRepository;
 
 import java.util.List;
 
-public class NewReleasesCommand extends CommandImpl {
+public class NewReleasesCommand extends AbstractCommand {
 
     public NewReleasesCommand(AdvisorRepository advisorRepository) {
 
