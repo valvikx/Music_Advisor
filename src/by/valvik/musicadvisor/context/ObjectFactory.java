@@ -5,7 +5,6 @@ import by.valvik.musicadvisor.context.configurator.ObjectConfigurator;
 import by.valvik.musicadvisor.exception.ConfigurationException;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
@@ -64,42 +63,7 @@ public class ObjectFactory {
 
         }
 
-        Object[] objects = Arrays.stream(parameters)
-                                 .map(p -> {
-
-                                     Class<?> parameterType = p.getType();
-
-                                     if (parameterType.isInterface()) {
-
-                                         if (p.isAnnotationPresent(Inject.class)) {
-
-                                             String qualifier = p.getAnnotation(Inject.class).qualifier();
-
-                                             return context.getObject(qualifier)
-                                                           .orElseGet(() -> {
-
-                                                               Class<?> implClass = context.getConfig()
-                                                                                           .getImplClassByQualifier(parameterType, qualifier)
-                                                                                           .orElseThrow();
-
-                                                               return context.getObject(implClass);
-
-                                                           });
-
-                                         }
-
-                                         Class<?> implClass = context.getConfig()
-                                                                     .getSingleImplClass(p.getType())
-                                                                     .orElseThrow();
-
-                                         return context.getObject(implClass);
-
-                                     }
-
-                                     return context.getObject(parameterType);
-
-                                 })
-                                 .toArray();
+        Object[] objects = getParameterObjects(parameters);
 
         return (T) constructor.newInstance(objects);
 
@@ -111,6 +75,47 @@ public class ObjectFactory {
                                                                  NoSuchMethodException {
 
         return tClass.getDeclaredConstructor().newInstance();
+
+    }
+
+    private Object[] getParameterObjects(Parameter[] parameters) {
+
+        return Arrays.stream(parameters)
+                     .map(p -> {
+
+                             Class<?> parameterType = p.getType();
+
+                             if (parameterType.isInterface()) {
+
+                                 if (p.isAnnotationPresent(Inject.class)) {
+
+                                     String qualifier = p.getAnnotation(Inject.class).qualifier();
+
+                                     return context.getObject(qualifier)
+                                                   .orElseGet(() -> {
+
+                                                       Class<?> implClass = context.getConfig()
+                                                                                   .getImplClassByQualifier(parameterType, qualifier)
+                                                                                   .orElseThrow();
+
+                                                       return context.getObject(implClass);
+
+                                                   });
+
+                                 }
+
+                                 Class<?> implClass = context.getConfig()
+                                                             .getSingleImplClass(p.getType())
+                                                             .orElseThrow();
+
+                                 return context.getObject(implClass);
+
+                             }
+
+                             return context.getObject(parameterType);
+
+                     })
+                     .toArray();
 
     }
 
