@@ -4,17 +4,19 @@ import by.valvik.musicadvisor.constant.Direction;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.exception.UtilException;
 import by.valvik.musicadvisor.holder.ArgsHolder;
+import by.valvik.musicadvisor.tuple.Tuple;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static by.valvik.musicadvisor.constant.Delimiter.*;
+import static by.valvik.musicadvisor.constant.Delimiter.AMPERSAND;
+import static by.valvik.musicadvisor.constant.Delimiter.EQUALS;
 import static by.valvik.musicadvisor.constant.Direction.NEXT;
 import static by.valvik.musicadvisor.constant.Direction.PREV;
 import static by.valvik.musicadvisor.constant.UserCommand.PLAYLISTS;
 import static by.valvik.musicadvisor.util.Props.getValue;
-import static java.lang.String.join;
+import static java.util.Collections.singletonList;
+import static java.util.Map.of;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.*;
 
@@ -30,17 +32,19 @@ public final class Parsers {
 
         if (isNull(query) || query.isEmpty() || !query.contains(EQUALS.getSign())) {
 
-            return Map.of();
+            return of();
 
         } else if (!query.contains(AMPERSAND.getSign())) {
 
-            return splitQueryParameter(query).entrySet().stream().collect(getMapCollector());
+            Tuple<String, String> pair = splitQueryPair(query);
+
+            return of(pair.getX(), singletonList(pair.getY()));
 
         }
 
         return Arrays.stream(query.split(AMPERSAND.getSign()))
-                     .flatMap(pair -> splitQueryParameter(pair).entrySet().stream())
-                     .collect(getMapCollector());
+                     .map(Parsers::splitQueryPair)
+                     .collect(groupingBy(Tuple::getX, mapping(Tuple::getY, toList())));
 
     }
 
@@ -121,7 +125,7 @@ public final class Parsers {
 
     }
 
-    private static Map<String, String> splitQueryParameter(String pair) {
+    private static Tuple<String, String> splitQueryPair(String pair) {
 
         int idx = pair.indexOf(EQUALS.getSign());
 
@@ -129,13 +133,7 @@ public final class Parsers {
 
         String value = pair.substring(idx + 1);
 
-        return Map.of(key, value);
-
-    }
-
-    private static Collector<Map.Entry<String, String>, ?, Map<String, List<String>>> getMapCollector() {
-
-        return groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, toList()));
+        return new Tuple<>(key, value);
 
     }
 
