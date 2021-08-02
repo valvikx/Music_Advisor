@@ -4,22 +4,24 @@ import by.valvik.musicadvisor.exception.ConfigurationException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.NoSuchElementException;
+import java.util.Arrays;
 import java.util.Properties;
 
 public final class Props {
 
-    private static final String APPLICATION_PROPERTIES = "application.properties";
+    private static final String[] PROPERTIES_NAME = {"application", "messages"};
 
-    private static final String MESSAGES_PROPERTIES = "messages.properties";
+    private static final String PROPERTIES_EXT = ".properties";
 
     private static final Properties PROPERTIES = new Properties();
 
-    public Props() {}
+    private Props() {}
 
     static {
 
-        loadProperties();
+        Arrays.stream(PROPERTIES_NAME)
+              .map(n -> n + PROPERTIES_EXT)
+              .forEach(Props::loadProperties);
 
     }
 
@@ -29,16 +31,13 @@ public final class Props {
 
     }
 
-    private static void loadProperties() {
+    private static void loadProperties(String propertiesName) {
 
         ClassLoader classLoader = Props.class.getClassLoader();
 
-        try (InputStream application = classLoader.getResourceAsStream(APPLICATION_PROPERTIES);
-             InputStream messages = classLoader.getResourceAsStream(MESSAGES_PROPERTIES)) {
+        try (InputStream resource = classLoader.getResourceAsStream(propertiesName)) {
 
-            PROPERTIES.load(application);
-
-            PROPERTIES.load(messages);
+            PROPERTIES.load(resource);
 
         } catch (IOException e) {
 
