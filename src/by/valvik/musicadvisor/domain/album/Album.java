@@ -28,12 +28,6 @@ public class Album extends Item {
 
     }
 
-    public List<Artist> getArtists() {
-
-        return artists;
-
-    }
-
     @Override
     public String presentation() {
 

@@ -18,7 +18,13 @@ public class AppHttpClient {
 
     private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
 
-    private final HttpClient client = HttpClient.newBuilder().build();
+    private final HttpClient client;
+
+    public AppHttpClient() {
+
+        this.client = HttpClient.newBuilder().build();
+
+    }
 
     public String performGet(String uri, String authorizationHeader) throws Exception {
 

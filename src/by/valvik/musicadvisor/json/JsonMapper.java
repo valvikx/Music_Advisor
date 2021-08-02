@@ -18,7 +18,7 @@ public class JsonMapper {
 
     public JsonMapper() {
 
-        gson = new GsonBuilder().setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES).create();
+        this.gson = new GsonBuilder().setFieldNamingPolicy(LOWER_CASE_WITH_UNDERSCORES).create();
 
     }
 

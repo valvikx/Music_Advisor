@@ -17,7 +17,7 @@ public class Application {
 
         context.setObjectFactory(objectFactory);
 
-        context.initSingletonObjects();
+        context.createSingletons();
 
         return context;
 

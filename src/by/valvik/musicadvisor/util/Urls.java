@@ -19,8 +19,6 @@ public final class Urls {
 
     private static final String KEY_CLIENT_SECRET = "client_secret";
 
-    public static final String PLAYLISTS_ENDPOINT = "categories/%s/playlists";
-
     private Urls() {
 
     }
@@ -52,12 +50,6 @@ public final class Urls {
     public static String getUrlTo(String resource, int limit) {
 
         return format(getValue(KEY_BROWSE_API_URL), resource, limit);
-
-    }
-
-    public static String getUrlToPlaylists(String categoryId, int limit) {
-
-        return format(getValue(KEY_BROWSE_API_URL), format(PLAYLISTS_ENDPOINT, categoryId), limit);
 
     }
 

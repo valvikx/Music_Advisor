@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static java.beans.Introspector.decapitalize;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 
 public class ApplicationContext {
@@ -28,11 +29,11 @@ public class ApplicationContext {
 
     }
 
-    public void initSingletonObjects() {
+    public void createSingletons() {
 
-        initSingletonFromConfigurationClass();
+        createSingletonsFromConfigurationClasses();
 
-        initSingletonFromAnnotatedClass();
+        createSingletonsFromAnnotatedClasses();
 
     }
 
@@ -52,21 +53,13 @@ public class ApplicationContext {
 
     public <T> Optional<T> getObject(String qualifier) {
 
-        return Optional.ofNullable((T) cache.get(qualifier));
+        return ofNullable((T) cache.get(qualifier));
 
     }
 
     public void addObjects(Map<String, Object> objects) {
 
         cache.putAll(objects);
-
-    }
-
-    public void addObject(Object object) {
-
-        String objectName = decapitalize(object.getClass().getSimpleName());
-
-        cache.put(objectName, object);
 
     }
 
@@ -82,7 +75,7 @@ public class ApplicationContext {
 
     }
 
-    private void initSingletonFromAnnotatedClass() {
+    private void createSingletonsFromAnnotatedClasses() {
 
         Set<Class<?>> singletonClasses = config.getAnnotatedClasses(Singleton.class);
 
@@ -90,30 +83,31 @@ public class ApplicationContext {
 
     }
 
-    private void initSingletonFromConfigurationClass() {
+    private void createSingletonsFromConfigurationClasses() {
 
         Set<Class<?>> configurationClasses = config.getAnnotatedClasses(Configuration.class);
 
         if (!configurationClasses.isEmpty()) {
 
-            Map<String, Object> objects = configurationClasses.stream()
-                    .flatMap(c -> Arrays.stream(c.getDeclaredMethods())
-                            .filter(m -> m.isAnnotationPresent(Singleton.class)))
-                    .collect(toMap(Method::getName, m -> {
+            Map<String, Object> objects =
+                    configurationClasses.stream()
+                                        .flatMap(c -> Arrays.stream(c.getDeclaredMethods())
+                                                            .filter(m -> m.isAnnotationPresent(Singleton.class)))
+                                        .collect(toMap(Method::getName, m -> {
 
-                        Object createdObject = objectFactory.create(m.getDeclaringClass());
+                                            Object createdObject = objectFactory.create(m.getDeclaringClass());
 
-                        try {
+                                            try {
 
-                            return m.invoke(createdObject);
+                                                return m.invoke(createdObject);
 
-                        } catch (IllegalAccessException | InvocationTargetException e) {
+                                            } catch (IllegalAccessException | InvocationTargetException e) {
 
-                            throw new ConfigurationException(e);
+                                                throw new ConfigurationException(e);
 
-                        }
+                                            }
 
-                    }));
+                                        }));
 
             addObjects(objects);
 

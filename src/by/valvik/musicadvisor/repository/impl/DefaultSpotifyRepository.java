@@ -4,7 +4,6 @@ import by.valvik.musicadvisor.annotation.Inject;
 import by.valvik.musicadvisor.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
 import by.valvik.musicadvisor.domain.Items;
-import by.valvik.musicadvisor.domain.error.Error;
 import by.valvik.musicadvisor.domain.error.RegularError;
 import by.valvik.musicadvisor.exception.ConfigurationException;
 import by.valvik.musicadvisor.exception.RepositoryException;

@@ -28,6 +28,8 @@ public class AppConfig {
 
     private static final String PLAYLISTS = "playlists";
 
+    private static final String CATEGORIES_PLAYLISTS = "categories/%s/playlists";
+
     @Singleton
     public Scanner scanner() {
 
@@ -61,7 +63,7 @@ public class AppConfig {
 
         factory.add(UserCommand.FEATURED, new Tuple<>(FEATURED_PLAYLISTS, PLAYLISTS));
 
-        factory.add(UserCommand.PLAYLISTS, new Tuple<>(null, PLAYLISTS));
+        factory.add(UserCommand.PLAYLISTS, new Tuple<>(CATEGORIES_PLAYLISTS, PLAYLISTS));
 
         return factory;
 

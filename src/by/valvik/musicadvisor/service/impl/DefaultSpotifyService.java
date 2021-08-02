@@ -24,8 +24,8 @@ import static by.valvik.musicadvisor.constant.Direction.PREV;
 import static by.valvik.musicadvisor.constant.UserCommand.PLAYLISTS;
 import static by.valvik.musicadvisor.util.Props.getValue;
 import static by.valvik.musicadvisor.util.Urls.getUrlTo;
-import static by.valvik.musicadvisor.util.Urls.getUrlToPlaylists;
 import static java.lang.Math.floorMod;
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 @Singleton
@@ -116,7 +116,7 @@ public class DefaultSpotifyService implements SpotifyService {
 
         String categoryName = contextHolder.getArgsHolder().getCategoryId();
 
-        return Objects.equals(command, PLAYLISTS) ? getUrlToPlaylists(categoryName, limit)
+        return Objects.equals(command, PLAYLISTS) ? getUrlTo(format(resourceTuple.getX(), categoryName), limit)
                                                   : getUrlTo(resourceTuple.getX(), limit);
 
     }
