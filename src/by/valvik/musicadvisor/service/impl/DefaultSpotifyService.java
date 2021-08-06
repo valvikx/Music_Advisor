@@ -58,7 +58,7 @@ public class DefaultSpotifyService implements SpotifyService {
 
         try {
 
-            Items<T> items = repository.getItems(url, resourceTuple.getY(), typeToken);
+            Items<T> items = repository.getItems(url, resourceTuple.y(), typeToken);
 
             contextHolder.setItems(items);
 
@@ -116,8 +116,8 @@ public class DefaultSpotifyService implements SpotifyService {
 
         String categoryName = contextHolder.getArgsHolder().getCategoryId();
 
-        return Objects.equals(command, PLAYLISTS) ? getUrlTo(format(resourceTuple.getX(), categoryName), limit)
-                                                  : getUrlTo(resourceTuple.getX(), limit);
+        return Objects.equals(command, PLAYLISTS) ? getUrlTo(format(resourceTuple.x(), categoryName), limit)
+                                                  : getUrlTo(resourceTuple.x(), limit);
 
     }
 

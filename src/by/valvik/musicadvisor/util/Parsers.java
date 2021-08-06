@@ -38,13 +38,13 @@ public final class Parsers {
 
             Tuple<String, String> pair = splitQueryPair(query);
 
-            return of(pair.getX(), singletonList(pair.getY()));
+            return of(pair.x(), singletonList(pair.y()));
 
         }
 
         return Arrays.stream(query.split(AMPERSAND.getSign()))
                      .map(Parsers::splitQueryPair)
-                     .collect(groupingBy(Tuple::getX, mapping(Tuple::getY, toList())));
+                     .collect(groupingBy(Tuple::x, mapping(Tuple::y, toList())));
 
     }
 

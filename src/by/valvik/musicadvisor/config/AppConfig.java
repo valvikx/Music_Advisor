@@ -15,6 +15,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Scanner;
 
+import static by.valvik.musicadvisor.factory.Factory.of;
+
 @Configuration
 public class AppConfig {
 
@@ -40,7 +42,7 @@ public class AppConfig {
     @Singleton
     public Factory<Class<? extends Item>, Type> typeTokenFactory() {
 
-        Factory<Class<? extends Item>, Type> factory = Factory.of();
+        Factory<Class<? extends Item>, Type> factory = of();
 
         factory.add(Album.class, new TypeToken<Items<Album>>() {}.getType());
 
@@ -55,7 +57,7 @@ public class AppConfig {
     @Singleton
     public Factory<UserCommand, Tuple<String, String>> sourceFactory() {
 
-        Factory<UserCommand, Tuple<String, String>> factory = Factory.of();
+        Factory<UserCommand, Tuple<String, String>> factory = of();
 
         factory.add(UserCommand.NEW, new Tuple<>(NEW_RELEASES, ALBUMS));
 
