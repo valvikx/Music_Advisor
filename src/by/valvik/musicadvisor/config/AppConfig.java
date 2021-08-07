@@ -40,9 +40,9 @@ public class AppConfig {
     }
 
     @Singleton
-    public Factory<Class<? extends Item>, Type> typeTokenFactory() {
+    public Factory<Class<? extends Item>, Type> typeTokenFactory(Factory<Class<? extends Item>, Type> factory) {
 
-        Factory<Class<? extends Item>, Type> factory = of();
+//        Factory<Class<? extends Item>, Type> factory = of();
 
         factory.add(Album.class, new TypeToken<Items<Album>>() {}.getType());
 

@@ -9,9 +9,11 @@ public class Application {
 
     public static ApplicationContext run(String packagesPrefix) {
 
+        ApplicationContext context = new ApplicationContext();
+
         Config config = new DefaultConfig(packagesPrefix);
 
-        ApplicationContext context = new ApplicationContext(config);
+        context.setConfig(config);
 
         ObjectFactory objectFactory = new ObjectFactory(context);
 

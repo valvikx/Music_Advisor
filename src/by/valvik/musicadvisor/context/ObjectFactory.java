@@ -2,7 +2,6 @@ package by.valvik.musicadvisor.context;
 
 import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.configurator.ObjectConfigurator;
-import by.valvik.musicadvisor.context.singleton.SingletonCtor;
 import by.valvik.musicadvisor.context.singleton.SingletonDefinition;
 import by.valvik.musicadvisor.context.singleton.SingletonMethod;
 import by.valvik.musicadvisor.exception.ConfigurationException;
@@ -12,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -82,13 +80,15 @@ public class ObjectFactory {
 
             SingletonMethod singletonMethod = definition.singletonMethod();
 
-            Object[] parameterObjects = singletonMethod.parameters();
+            Parameter[] parameters = singletonMethod.parameters();
 
-            if (parameterObjects.length == 0) {
+            if (parameters.length == 0) {
 
                 return singletonMethod.method().invoke(singletonMethod.configObject());
 
             }
+
+            Object[] parameterObjects = getParameterObjects(parameters);
 
             return singletonMethod.method().invoke(singletonMethod.configObject(), parameterObjects);
 
@@ -111,7 +111,11 @@ public class ObjectFactory {
 
                              String qualifier = p.getAnnotation(Inject.class).qualifier();
 
-                             return context.getObject(qualifier, parameterType);
+                             if (!qualifier.isEmpty()) {
+
+                                 return context.getObject(qualifier, parameterType);
+
+                             }
 
                          }
 

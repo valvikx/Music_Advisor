@@ -56,8 +56,7 @@ public record SingletonScanner(Config config) {
                                                   .map(m -> new SingletonDefinition(m.getName(),
                                                                                     m.getReturnType(),
                                                                                    null,
-                                                                                    new SingletonMethod(configObject, m, m.getParameters()),
-                                                                                    Map.of()));
+                                                                                    new SingletonMethod(configObject, m, m.getParameters())));
 
 
                            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
@@ -104,17 +103,12 @@ public record SingletonScanner(Config config) {
 
                                    SingletonCtor singletonCtor = new SingletonCtor(constructor.orElseThrow());
 
-                                   Map<Field, Class<?>> dependencies = Arrays.stream(c.getDeclaredFields())
-                                                                             .filter(f -> f.isAnnotationPresent(Inject.class))
-                                                                             .collect(toMap(identity(), Field::getType));
-
                                    String qualifier = c.getDeclaredAnnotation(Singleton.class).qualifier();
 
                                    return new SingletonDefinition(qualifier.isEmpty() ? decapitalize(c.getSimpleName()) : qualifier,
                                                                   c,
                                                                   singletonCtor, 
-                                                                  null,
-                                                                  dependencies);
+                                                                 null);
 
                                })
                                .collect(toSet());

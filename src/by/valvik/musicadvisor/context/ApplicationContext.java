@@ -17,11 +17,9 @@ public class ApplicationContext {
 
     private ObjectFactory objectFactory;
 
-    private final Config config;
+    private Config config;
 
-    public ApplicationContext(Config config) {
-
-        this.config = config;
+    public ApplicationContext() {
 
         this.singletons = new HashMap<>();
 
@@ -90,27 +88,27 @@ public class ApplicationContext {
 
     }
 
+    public ObjectFactory getObjectFactory() {
+
+        return objectFactory;
+
+    }
+
     public void setObjectFactory(ObjectFactory objectFactory) {
 
         this.objectFactory = objectFactory;
 
     }
 
-    public Object addSingleton(String qualifier, Object singleton) {
-
-         if (singletons.containsKey(qualifier)) {
-
-              return null;
-
-         }
-
-         return singletons.put(qualifier, singleton);
-
-    }
-
     public Config getConfig() {
 
         return config;
+
+    }
+
+    public void setConfig(Config config) {
+
+        this.config = config;
 
     }
 
@@ -160,6 +158,18 @@ public class ApplicationContext {
     private <T> Class<T> getSingleImpl(Class<T> implClass) {
 
         return (Class<T>) config.getSingleImplClass(implClass).orElseThrow();
+
+    }
+
+    private void addSingleton(String qualifier, Object singleton) {
+
+        if (singletons.containsKey(qualifier)) {
+
+            return;
+
+        }
+
+        singletons.put(qualifier, singleton);
 
     }
 
