@@ -1,4 +1,4 @@
-package by.valvik.musicadvisor.annotation;
+package by.valvik.musicadvisor.context.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

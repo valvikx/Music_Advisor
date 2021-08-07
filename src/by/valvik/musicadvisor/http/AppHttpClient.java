@@ -1,6 +1,6 @@
 package by.valvik.musicadvisor.http;
 
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 
 import java.net.URI;
 import java.net.http.HttpClient;

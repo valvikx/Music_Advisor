@@ -10,4 +10,18 @@ public enum UserCommand {
 
     }
 
+    public static class Qualifier {
+
+        public static final String AUTH = "auth";
+
+        public static final String NEW = "new";
+
+        public static final String CATEGORIES = "categories";
+
+        public static final String FEATURED = "featured";
+
+        public static final String PLAYLISTS = "playlists";
+
+    }
+
 }

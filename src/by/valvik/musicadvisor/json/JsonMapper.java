@@ -1,6 +1,6 @@
 package by.valvik.musicadvisor.json;
 
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
 import by.valvik.musicadvisor.domain.Items;
 import com.google.gson.Gson;

@@ -1,18 +1,18 @@
 package by.valvik.musicadvisor.command.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.command.Command;
 import by.valvik.musicadvisor.constant.Status;
 import by.valvik.musicadvisor.exception.UtilException;
-import by.valvik.musicadvisor.holder.ArgsHolder;
-import by.valvik.musicadvisor.holder.ContextHolder;
+import by.valvik.musicadvisor.context.holder.ArgsHolder;
+import by.valvik.musicadvisor.context.holder.ContextHolder;
 import by.valvik.musicadvisor.view.View;
 
 import java.util.Objects;
 
 import static by.valvik.musicadvisor.constant.AppConstant.KEY_COMMAND_CANNOT_BE_EXECUTED;
-import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_ARGS_COMMAND;
+import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_ARGS;
 import static by.valvik.musicadvisor.constant.Status.BAD_REQUEST;
 import static by.valvik.musicadvisor.constant.Status.OK;
 import static by.valvik.musicadvisor.constant.UserCommand.AUTH;
@@ -22,7 +22,7 @@ import static by.valvik.musicadvisor.util.Props.getValue;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-@Singleton(qualifier = QUALIFIER_ARGS_COMMAND)
+@Singleton(qualifier = COMMAND_QUALIFIER_ARGS)
 public class ArgsCommand implements Command {
 
     private static final String KEY_ENTER_COMMAND = "enter_command";

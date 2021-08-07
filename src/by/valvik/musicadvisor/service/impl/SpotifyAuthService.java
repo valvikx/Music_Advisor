@@ -1,7 +1,7 @@
 package by.valvik.musicadvisor.service.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.auth.Token;
 import by.valvik.musicadvisor.exception.RepositoryException;
 import by.valvik.musicadvisor.exception.ServiceException;

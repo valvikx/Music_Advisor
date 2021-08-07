@@ -1,7 +1,7 @@
 package by.valvik.musicadvisor.service.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.constant.Direction;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.domain.Item;
@@ -10,7 +10,7 @@ import by.valvik.musicadvisor.dto.BrowseItem;
 import by.valvik.musicadvisor.exception.RepositoryException;
 import by.valvik.musicadvisor.exception.ServiceException;
 import by.valvik.musicadvisor.factory.Factory;
-import by.valvik.musicadvisor.holder.ContextHolder;
+import by.valvik.musicadvisor.context.holder.ContextHolder;
 import by.valvik.musicadvisor.repository.SpotifyRepository;
 import by.valvik.musicadvisor.service.SpotifyService;
 import by.valvik.musicadvisor.tuple.Tuple;

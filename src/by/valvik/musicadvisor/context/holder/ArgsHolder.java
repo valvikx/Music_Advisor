@@ -1,4 +1,4 @@
-package by.valvik.musicadvisor.holder;
+package by.valvik.musicadvisor.context.holder;
 
 import by.valvik.musicadvisor.constant.Direction;
 import by.valvik.musicadvisor.constant.UserCommand;

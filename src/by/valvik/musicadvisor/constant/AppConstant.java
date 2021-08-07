@@ -4,19 +4,9 @@ public final class AppConstant {
 
     private AppConstant() {}
 
-    public static final String QUALIFIER_GREETING_COMMAND = "greetingCommand";
+    public static final String COMMAND_QUALIFIER_GREETING = "greetingCommand";
 
-    public static final String QUALIFIER_ARGS_COMMAND = "argsCommand";
-
-    public static final String QUALIFIER_AUTH_COMMAND = "auth";
-
-    public static final String QUALIFIER_NEW_COMMAND = "new";
-
-    public static final String QUALIFIER_CATEGORIES_COMMAND = "categories";
-
-    public static final String QUALIFIER_FEATURED_PLAYLISTS = "featured";
-
-    public static final String QUALIFIER_CATEGORY_PLAYLISTS = "playlists";
+    public static final String COMMAND_QUALIFIER_ARGS = "argsCommand";
 
     public static final String KEY_CODE = "code";
 

@@ -1,6 +1,6 @@
 package by.valvik.musicadvisor.json;
 
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.exception.UtilException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;

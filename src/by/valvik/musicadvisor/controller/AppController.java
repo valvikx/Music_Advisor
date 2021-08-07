@@ -1,27 +1,27 @@
 package by.valvik.musicadvisor.controller;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.command.Command;
 import by.valvik.musicadvisor.constant.Status;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.context.ApplicationContext;
-import by.valvik.musicadvisor.holder.ContextHolder;
+import by.valvik.musicadvisor.context.holder.ContextHolder;
 
 import java.util.Objects;
 
-import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_ARGS_COMMAND;
-import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_GREETING_COMMAND;
+import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_ARGS;
+import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_GREETING;
 import static by.valvik.musicadvisor.constant.Status.BAD_REQUEST;
 import static by.valvik.musicadvisor.constant.UserCommand.EXIT;
 
 @Singleton
 public class AppController {
 
-    @Inject(qualifier = QUALIFIER_GREETING_COMMAND)
+    @Inject(qualifier = COMMAND_QUALIFIER_GREETING)
     private Command greetingCommand;
 
-    @Inject(qualifier = QUALIFIER_ARGS_COMMAND)
+    @Inject(qualifier = COMMAND_QUALIFIER_ARGS)
     private Command argsCommand;
 
     @Inject
@@ -49,11 +49,7 @@ public class AppController {
 
             }
 
-            Class<? extends Command> commandClass = context.getConfig()
-                                                           .getImplClassByQualifier(Command.class, userCommand.getName())
-                                                           .orElseThrow();
-
-            Command command = context.getObject(commandClass);
+            Command command = context.getObject(userCommand.getName(), Command.class);
 
             command.execute();
 

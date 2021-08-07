@@ -1,21 +1,19 @@
 package by.valvik.musicadvisor.context;
 
-import by.valvik.musicadvisor.annotation.Configuration;
-import by.valvik.musicadvisor.annotation.Singleton;
 import by.valvik.musicadvisor.context.config.Config;
-import by.valvik.musicadvisor.exception.ConfigurationException;
+import by.valvik.musicadvisor.context.singleton.SingletonDefinition;
+import by.valvik.musicadvisor.context.singleton.SingletonScanner;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
-import static java.beans.Introspector.decapitalize;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toMap;
+import static java.util.Optional.*;
+import static java.util.stream.Collectors.toCollection;
 
 public class ApplicationContext {
 
-    private final Map<String, Object> cache;
+    private final Map<String, Object> singletons;
+
+    private final Map<String, SingletonDefinition> singletonDefinitions;
 
     private ObjectFactory objectFactory;
 
@@ -25,47 +23,70 @@ public class ApplicationContext {
 
         this.config = config;
 
-        this.cache = new HashMap<>();
+        this.singletons = new HashMap<>();
+
+        this.singletonDefinitions = new HashMap<>();
 
     }
 
     public void createSingletons() {
 
-        createSingletonsFromConfigurationClasses();
+        SingletonScanner scanner = new SingletonScanner(config);
 
-        createSingletonsFromAnnotatedClasses();
+        Set<SingletonDefinition> definitions = scanner.scanConfigurationClasses();
+
+        definitions.addAll(scanner.scanAnnotatedClasses());
+
+        definitions.forEach(d -> singletonDefinitions.put(d.name(), d));
+
+        createSingletonsByDefinition();
 
     }
 
     public <T> T getObject(Class<T> tClass) {
 
-        String tClassName = decapitalize(tClass.getSimpleName());
+        Optional<T> foundSingleton = findSingletonByClass(tClass);
 
-        if (cache.containsKey(tClassName)) {
+        return foundSingleton.orElseGet(() -> {
 
-            return (T) cache.get(tClassName);
+           Optional<SingletonDefinition> foundDefinitions = findSingletonDefinitionByClass(tClass);
 
-        }
+           return foundDefinitions.map(d -> {
 
-        return createObject(tClassName, tClass);
+                                       T t = (T) objectFactory.create(d);
+
+                                       addSingleton(d.name(), t);
+
+                                       return t;
+
+                                  })
+                                  .orElseGet(() -> {
+
+                                      Class<T> implClass = tClass.isInterface() ? getSingleImpl(tClass) : tClass;
+
+                                      return objectFactory.create(implClass);
+
+                                  });
+
+        });
 
     }
 
-    public <T> Optional<T> getObject(String qualifier) {
+    public <T> T getObject(String qualifier, Class<T> tClass) {
 
-        return ofNullable((T) cache.get(qualifier));
+        Optional<Object> singletonOptional = ofNullable(singletons.get(qualifier));
 
-    }
+        return tClass.cast(singletonOptional.orElseGet(() -> {
 
-    public void addObjects(Map<String, Object> objects) {
+            SingletonDefinition definition = ofNullable(singletonDefinitions.get(qualifier)).orElseThrow();
 
-        cache.putAll(objects);
+            Object singleton = objectFactory.create(definition);
 
-    }
+            addSingleton(definition.name(), singleton);
 
-    public Config getConfig() {
+            return singleton;
 
-        return config;
+        }));
 
     }
 
@@ -75,56 +96,71 @@ public class ApplicationContext {
 
     }
 
-    private void createSingletonsFromAnnotatedClasses() {
+    public Object addSingleton(String qualifier, Object singleton) {
 
-        Set<Class<?>> singletonClasses = config.getAnnotatedClasses(Singleton.class);
+         if (singletons.containsKey(qualifier)) {
 
-        singletonClasses.forEach(this::getObject);
+              return null;
+
+         }
+
+         return singletons.put(qualifier, singleton);
 
     }
 
-    private void createSingletonsFromConfigurationClasses() {
+    public Config getConfig() {
 
-        Set<Class<?>> configurationClasses = config.getAnnotatedClasses(Configuration.class);
+        return config;
 
-        if (!configurationClasses.isEmpty()) {
-
-            Map<String, Object> objects =
-                    configurationClasses.stream()
-                                        .flatMap(c -> Arrays.stream(c.getDeclaredMethods())
-                                                            .filter(m -> m.isAnnotationPresent(Singleton.class)))
-                                        .collect(toMap(Method::getName, m -> {
-
-                                            Object createdObject = objectFactory.create(m.getDeclaringClass());
-
-                                            try {
-
-                                                return m.invoke(createdObject);
-
-                                            } catch (IllegalAccessException | InvocationTargetException e) {
-
-                                                throw new ConfigurationException(e);
-
-                                            }
-
-                                        }));
-
-            addObjects(objects);
-
-        }
     }
 
-    private <T> T createObject(String qualifier, Class<T> tClass) {
+    private void createSingletonsByDefinition() {
 
-        T t = objectFactory.create(tClass);
+        singletonDefinitions.values().forEach(d -> {
 
-        if (tClass.isAnnotationPresent(Singleton.class)) {
+            Object singleton = objectFactory.create(d);
 
-            cache.put(qualifier, t);
+            addSingleton(d.name(), singleton);
+
+        });
+
+    }
+
+    private <T> Optional<T> findSingletonByClass(Class<T> clazz) {
+
+          return queueWrapper((Queue<T>) singletons.values()
+                                                   .stream()
+                                                   .filter(o -> Objects.equals(o.getClass(), clazz))
+                                                   .collect(toCollection(ArrayDeque::new)));
+
+
+    }
+
+    private Optional<SingletonDefinition> findSingletonDefinitionByClass(Class<?> clazz) {
+
+        return queueWrapper(singletonDefinitions.values()
+                                                .stream()
+                                                .filter(c -> Objects.equals(c.singletonClass(), clazz))
+                                                .collect(toCollection(ArrayDeque::new)));
+
+    }
+
+    private <T> Optional<T> queueWrapper(Queue<T> queue) {
+
+        if (queue.size() != 1) {
+
+            return empty();
 
         }
 
-        return t;
+        return of(queue.poll());
+
+    }
+
+    private <T> Class<T> getSingleImpl(Class<T> implClass) {
+
+        return (Class<T>) config.getSingleImplClass(implClass).orElseThrow();
+
     }
 
 }

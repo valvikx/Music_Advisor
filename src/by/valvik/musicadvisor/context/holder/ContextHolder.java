@@ -1,7 +1,7 @@
-package by.valvik.musicadvisor.holder;
+package by.valvik.musicadvisor.context.holder;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Items;
 import by.valvik.musicadvisor.domain.Item;
 

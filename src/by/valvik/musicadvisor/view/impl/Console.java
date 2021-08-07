@@ -1,7 +1,7 @@
 package by.valvik.musicadvisor.view.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
 import by.valvik.musicadvisor.util.Props;
 import by.valvik.musicadvisor.view.View;

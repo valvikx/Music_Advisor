@@ -1,6 +1,6 @@
 package by.valvik.musicadvisor.context.config.impl;
 
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.context.config.Config;
 import by.valvik.musicadvisor.context.configurator.ObjectConfigurator;
 import by.valvik.musicadvisor.exception.ConfigurationException;

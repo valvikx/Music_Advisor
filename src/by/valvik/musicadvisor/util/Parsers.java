@@ -3,7 +3,7 @@ package by.valvik.musicadvisor.util;
 import by.valvik.musicadvisor.constant.Direction;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.exception.UtilException;
-import by.valvik.musicadvisor.holder.ArgsHolder;
+import by.valvik.musicadvisor.context.holder.ArgsHolder;
 import by.valvik.musicadvisor.tuple.Tuple;
 
 import java.util.*;

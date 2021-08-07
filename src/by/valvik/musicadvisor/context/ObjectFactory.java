@@ -1,7 +1,10 @@
 package by.valvik.musicadvisor.context;
 
-import by.valvik.musicadvisor.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.configurator.ObjectConfigurator;
+import by.valvik.musicadvisor.context.singleton.SingletonCtor;
+import by.valvik.musicadvisor.context.singleton.SingletonDefinition;
+import by.valvik.musicadvisor.context.singleton.SingletonMethod;
 import by.valvik.musicadvisor.exception.ConfigurationException;
 
 import java.lang.reflect.Constructor;
@@ -9,6 +12,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 public class ObjectFactory {
 
@@ -24,14 +30,21 @@ public class ObjectFactory {
 
     }
 
+    public Object create(SingletonDefinition definition) {
+
+        Object object = createByDefinition(definition);
+
+        configurators.forEach(oc -> oc.configure(object, context));
+
+        return object;
+
+    }
+
     public <T> T create(Class<T> tClass) {
 
         try {
 
-            boolean hasAnnotatedCtor = Arrays.stream(tClass.getDeclaredConstructors())
-                                             .anyMatch(c -> c.isAnnotationPresent(Inject.class));
-
-            T t = hasAnnotatedCtor ? createWhenAnnotatedCtor(tClass) : createWithNoAnnotation(tClass);
+            T t = tClass.getDeclaredConstructor().newInstance();
 
             configurators.forEach(oc -> oc.configure(t, context));
 
@@ -45,36 +58,45 @@ public class ObjectFactory {
 
     }
 
-    private <T> T createWhenAnnotatedCtor(Class<T> tClass) throws InstantiationException,
-                                                                  IllegalAccessException,
-                                                                  InvocationTargetException,
-                                                                  NoSuchMethodException {
+    private Object createByDefinition(SingletonDefinition definition) {
 
-        Constructor<?> constructor = Arrays.stream(tClass.getDeclaredConstructors())
-                                           .filter(c -> c.isAnnotationPresent(Inject.class))
-                                           .findFirst()
-                                           .get();
+        try {
 
-        Parameter[] parameters = constructor.getParameters();
+            if (nonNull(definition.singletonCtor())) {
 
-        if (parameters.length == 0) {
+                Constructor<?> ctor = definition.singletonCtor().ctor();
 
-            return (T) constructor.newInstance();
+                Parameter[] parameters = ctor.getParameters();
+
+                if (parameters.length == 0) {
+
+                    return ctor.newInstance();
+
+                }
+
+                Object[] parameterObjects = getParameterObjects(parameters);
+
+                return ctor.newInstance(parameterObjects);
+
+            }
+
+            SingletonMethod singletonMethod = definition.singletonMethod();
+
+            Object[] parameterObjects = singletonMethod.parameters();
+
+            if (parameterObjects.length == 0) {
+
+                return singletonMethod.method().invoke(singletonMethod.configObject());
+
+            }
+
+            return singletonMethod.method().invoke(singletonMethod.configObject(), parameterObjects);
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+
+            throw new ConfigurationException(e);
 
         }
-
-        Object[] objects = getParameterObjects(parameters);
-
-        return (T) constructor.newInstance(objects);
-
-    }
-
-    private <T> T createWithNoAnnotation(Class<T> tClass) throws InstantiationException,
-                                                                 IllegalAccessException,
-                                                                 InvocationTargetException,
-                                                                 NoSuchMethodException {
-
-        return tClass.getDeclaredConstructor().newInstance();
 
     }
 
@@ -83,36 +105,17 @@ public class ObjectFactory {
         return Arrays.stream(parameters)
                      .map(p -> {
 
-                             Class<?> parameterType = p.getType();
+                         Class<?> parameterType = p.getType();
 
-                             if (parameterType.isInterface()) {
+                         if (p.isAnnotationPresent(Inject.class)) {
 
-                                 if (p.isAnnotationPresent(Inject.class)) {
+                             String qualifier = p.getAnnotation(Inject.class).qualifier();
 
-                                     String qualifier = p.getAnnotation(Inject.class).qualifier();
+                             return context.getObject(qualifier, parameterType);
 
-                                     return context.getObject(qualifier)
-                                                   .orElseGet(() -> {
+                         }
 
-                                                       Class<?> implClass = context.getConfig()
-                                                                                   .getImplClassByQualifier(parameterType, qualifier)
-                                                                                   .orElseThrow();
-
-                                                       return context.getObject(implClass);
-
-                                                   });
-
-                                 }
-
-                                 Class<?> implClass = context.getConfig()
-                                                             .getSingleImplClass(p.getType())
-                                                             .orElseThrow();
-
-                                 return context.getObject(implClass);
-
-                             }
-
-                             return context.getObject(parameterType);
+                         return context.getObject(parameterType);
 
                      })
                      .toArray();

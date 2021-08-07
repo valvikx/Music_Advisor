@@ -1,11 +1,10 @@
 package by.valvik.musicadvisor.context.configurator.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
 import by.valvik.musicadvisor.context.ApplicationContext;
+import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.configurator.ObjectConfigurator;
 import by.valvik.musicadvisor.exception.ConfigurationException;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -24,29 +23,10 @@ public class InjectConfigurator implements ObjectConfigurator {
 
                       String qualifier = f.getAnnotation(Inject.class).qualifier();
 
-                      Object object;
+                      Object injectObject = qualifier.isEmpty() ? context.getObject(f.getType())
+                                                                : context.getObject(qualifier, f.getType());
 
-                      if (qualifier.isEmpty()) {
-
-                          Class<?> fieldType = f.getType().isInterface() ? getSingleImpl(f, context) : f.getType();
-
-                          object = context.getObject(fieldType);
-
-                      } else {
-
-                          object = context.getObject(qualifier)
-                                          .orElseGet(() -> {
-
-                                              Class<?> fieldType = f.getType().isInterface() ? getImplByQualifier(f, context, qualifier)
-                                                                                             : f.getType();
-
-                                              return context.getObject(fieldType);
-
-                                          });
-
-                      }
-
-                      f.set(configurableObject, object);
+                      f.set(configurableObject, injectObject);
 
                   } catch (IllegalAccessException | NoSuchElementException e) {
 
@@ -55,18 +35,6 @@ public class InjectConfigurator implements ObjectConfigurator {
                   }
 
               });
-
-    }
-
-    private Class<?> getSingleImpl(Field field, ApplicationContext context) {
-
-        return context.getConfig().getSingleImplClass(field.getType()).orElseThrow();
-
-    }
-
-    private Class<?> getImplByQualifier(Field field, ApplicationContext context, String qualifier) {
-
-        return context.getConfig().getImplClassByQualifier(field.getType(), qualifier).orElseThrow();
 
     }
 

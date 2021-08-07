@@ -1,11 +1,12 @@
 package by.valvik.musicadvisor.command.impl;
 
-import by.valvik.musicadvisor.annotation.Inject;
-import by.valvik.musicadvisor.annotation.Singleton;
+import by.valvik.musicadvisor.constant.UserCommand;
+import by.valvik.musicadvisor.context.annotation.Inject;
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.command.Command;
 import by.valvik.musicadvisor.constant.Status;
 import by.valvik.musicadvisor.exception.ServiceException;
-import by.valvik.musicadvisor.holder.ContextHolder;
+import by.valvik.musicadvisor.context.holder.ContextHolder;
 import by.valvik.musicadvisor.http.AppHttpServer;
 import by.valvik.musicadvisor.service.AuthService;
 import by.valvik.musicadvisor.view.View;
@@ -22,7 +23,7 @@ import static by.valvik.musicadvisor.util.Props.getValue;
 import static by.valvik.musicadvisor.util.Urls.getUrlToAuthorize;
 import static java.util.Objects.nonNull;
 
-@Singleton(qualifier = QUALIFIER_AUTH_COMMAND)
+@Singleton(qualifier = UserCommand.Qualifier.AUTH)
 public class AuthCommand implements Command {
 
     private static final String KEY_ALREADY_LOGGED_IN = "already_logged_in";
