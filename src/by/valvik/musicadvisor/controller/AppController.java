@@ -18,6 +18,9 @@ import static by.valvik.musicadvisor.constant.UserCommand.EXIT;
 @Singleton
 public class AppController {
 
+    @Inject
+    ApplicationContext context;
+
     @Inject(qualifier = COMMAND_QUALIFIER_GREETING)
     private Command greetingCommand;
 
@@ -27,7 +30,7 @@ public class AppController {
     @Inject
     private ContextHolder contextHolder;
 
-    public void start(ApplicationContext context) {
+    public void start() {
 
         greetingCommand.execute();
 

@@ -9,19 +9,23 @@ public class Application {
 
     public static ApplicationContext run(String packagesPrefix) {
 
-        ApplicationContext context = new ApplicationContext();
+        ApplicationContext initialContext = new ApplicationContext();
 
         Config config = new DefaultConfig(packagesPrefix);
 
-        context.setConfig(config);
+        initialContext.setConfig(config);
 
-        ObjectFactory objectFactory = new ObjectFactory(context);
+        ObjectFactory objectFactory = new ObjectFactory(initialContext);
 
-        context.setObjectFactory(objectFactory);
+        initialContext.setObjectFactory(objectFactory);
 
-        context.createSingletons();
+        initialContext.createSingletons();
 
-        return context;
+        ApplicationContext applicationContext = initialContext.getObject(ApplicationContext.class);
+
+        initialContext.mergeContexts(applicationContext);
+
+        return applicationContext;
 
     }
 

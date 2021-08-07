@@ -13,7 +13,7 @@ public class Main {
 
         AppController controller = context.getObject(AppController.class);
 
-        controller.start(context);
+        controller.start();
 
     }
 

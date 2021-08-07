@@ -1,14 +1,17 @@
 package by.valvik.musicadvisor.context;
 
+import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.context.config.Config;
 import by.valvik.musicadvisor.context.singleton.SingletonDefinition;
 import by.valvik.musicadvisor.context.singleton.SingletonScanner;
+import by.valvik.musicadvisor.exception.ConfigurationException;
 
 import java.util.*;
 
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.toCollection;
 
+@Singleton
 public class ApplicationContext {
 
     private final Map<String, Object> singletons;
@@ -85,6 +88,27 @@ public class ApplicationContext {
             return singleton;
 
         }));
+
+    }
+
+    public void mergeContexts(ApplicationContext context) {
+
+        Arrays.stream(context.getClass().getDeclaredFields())
+              .forEach(f -> {
+
+                  try {
+
+                       f.setAccessible(true);
+
+                       f.set(context, f.get(this));
+
+                  } catch (IllegalAccessException e) {
+
+                      throw new ConfigurationException(e);
+
+                  }
+
+              });
 
     }
 
