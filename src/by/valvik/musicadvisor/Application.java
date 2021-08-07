@@ -23,7 +23,7 @@ public class Application {
 
         ApplicationContext applicationContext = initialContext.getObject(ApplicationContext.class);
 
-        initialContext.mergeContexts(applicationContext);
+        initialContext.copyTo(applicationContext);
 
         return applicationContext;
 

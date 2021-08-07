@@ -91,7 +91,7 @@ public class ApplicationContext {
 
     }
 
-    public void mergeContexts(ApplicationContext context) {
+    public void copyTo(ApplicationContext context) {
 
         Arrays.stream(context.getClass().getDeclaredFields())
               .forEach(f -> {
@@ -150,24 +150,24 @@ public class ApplicationContext {
 
     private <T> Optional<T> findSingletonByClass(Class<T> clazz) {
 
-          return queueWrapper((Queue<T>) singletons.values()
-                                                   .stream()
-                                                   .filter(o -> Objects.equals(o.getClass(), clazz))
-                                                   .collect(toCollection(ArrayDeque::new)));
+          return extractObject((Queue<T>) singletons.values()
+                                                    .stream()
+                                                    .filter(o -> Objects.equals(o.getClass(), clazz))
+                                                    .collect(toCollection(ArrayDeque::new)));
 
 
     }
 
     private Optional<SingletonDefinition> findSingletonDefinitionByClass(Class<?> clazz) {
 
-        return queueWrapper(singletonDefinitions.values()
-                                                .stream()
-                                                .filter(c -> Objects.equals(c.singletonClass(), clazz))
-                                                .collect(toCollection(ArrayDeque::new)));
+        return extractObject(singletonDefinitions.values()
+                                                 .stream()
+                                                 .filter(c -> Objects.equals(c.singletonClass(), clazz))
+                                                 .collect(toCollection(ArrayDeque::new)));
 
     }
 
-    private <T> Optional<T> queueWrapper(Queue<T> queue) {
+    private <T> Optional<T> extractObject(Queue<T> queue) {
 
         if (queue.size() != 1) {
 
