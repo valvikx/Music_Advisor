@@ -1,5 +1,4 @@
 ## About
-____
 JetBrains Academy  
 Track: Java Developer  
 Project: Music Advisor  
