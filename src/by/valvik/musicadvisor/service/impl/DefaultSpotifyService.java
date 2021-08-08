@@ -33,7 +33,7 @@ public class DefaultSpotifyService implements SpotifyService {
 
     private static final String QUALIFIER_TYPE_TOKEN_FACTORY = "typeTokenFactory";
 
-    private static final String QUALIFIER_SOURCE_FACTORY = "sourceFactory";
+    private static final String QUALIFIER_RESOURCE_FACTORY = "resourceFactory";
 
     @Inject
     private SpotifyRepository repository;
@@ -44,21 +44,21 @@ public class DefaultSpotifyService implements SpotifyService {
     @Inject(qualifier = QUALIFIER_TYPE_TOKEN_FACTORY)
     private Factory<Class<? extends Item>, Type> typeTokenFactory;
 
-    @Inject(qualifier = QUALIFIER_SOURCE_FACTORY)
-    private Factory<UserCommand, Tuple<String, String>> sourceFactory;
+    @Inject(qualifier = QUALIFIER_RESOURCE_FACTORY)
+    private Factory<UserCommand, Tuple<String, String>> resourceFactory;
 
     @Override
     public <T extends Item> BrowseItem getBrowseItem(UserCommand command, Class<T> entityClass) throws ServiceException {
 
-        Tuple<String, String> resourceTuple = sourceFactory.get(command);
+        Tuple<String, String> resources = resourceFactory.get(command);
 
         Type typeToken = typeTokenFactory.get(entityClass);
 
-        String url = getActualUrl(resourceTuple);
+        String url = getActualUrl(resources.x());
 
         try {
 
-            Items<T> items = repository.getItems(url, resourceTuple.y(), typeToken);
+            Items<T> items = repository.getItems(url, resources.y(), typeToken);
 
             contextHolder.setItems(items);
 
@@ -72,7 +72,7 @@ public class DefaultSpotifyService implements SpotifyService {
 
     }
 
-    private String getActualUrl(Tuple<String, String> resourceTuple) throws ServiceException {
+    private String getActualUrl(String resource) throws ServiceException {
 
         Direction direction = contextHolder.getArgsHolder().getDirection();
 
@@ -116,8 +116,8 @@ public class DefaultSpotifyService implements SpotifyService {
 
         String categoryName = contextHolder.getArgsHolder().getCategoryId();
 
-        return Objects.equals(command, PLAYLISTS) ? getUrlTo(format(resourceTuple.x(), categoryName), limit)
-                                                  : getUrlTo(resourceTuple.x(), limit);
+        return Objects.equals(command, PLAYLISTS) ? getUrlTo(format(resource, categoryName), limit)
+                                                  : getUrlTo(resource, limit);
 
     }
 

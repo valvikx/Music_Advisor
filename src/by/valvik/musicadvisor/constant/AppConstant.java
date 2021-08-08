@@ -4,9 +4,9 @@ public final class AppConstant {
 
     private AppConstant() {}
 
-    public static final String COMMAND_QUALIFIER_GREETING = "greetingCommand";
+    public static final String COMMAND_QUALIFIER_GREETING = "greeting";
 
-    public static final String COMMAND_QUALIFIER_ARGS = "argsCommand";
+    public static final String COMMAND_QUALIFIER_ARGS = "args";
 
     public static final String KEY_CODE = "code";
 

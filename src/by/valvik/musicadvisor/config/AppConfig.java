@@ -55,7 +55,7 @@ public class AppConfig {
     }
 
     @Singleton
-    public Factory<UserCommand, Tuple<String, String>> sourceFactory() {
+    public Factory<UserCommand, Tuple<String, String>> resourceFactory() {
 
         Factory<UserCommand, Tuple<String, String>> factory = of();
 
