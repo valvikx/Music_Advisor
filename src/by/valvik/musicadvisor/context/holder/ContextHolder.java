@@ -2,7 +2,7 @@ package by.valvik.musicadvisor.context.holder;
 
 import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.annotation.Singleton;
-import by.valvik.musicadvisor.domain.Items;
+import by.valvik.musicadvisor.domain.Response;
 import by.valvik.musicadvisor.domain.Item;
 
 @Singleton
@@ -13,7 +13,7 @@ public class ContextHolder {
 
     private String authHeader;
 
-    private Items<? extends Item> items;
+    private Response<? extends Item> response;
 
     public ArgsHolder getArgsHolder() {
 
@@ -39,15 +39,15 @@ public class ContextHolder {
 
     }
 
-    public Items<? extends Item> getItems() {
+    public Response<? extends Item> getItems() {
 
-        return items;
+        return response;
 
     }
 
-    public void setItems(Items<? extends Item> items) {
+    public void setItems(Response<? extends Item> response) {
 
-        this.items = items;
+        this.response = response;
 
     }
 

@@ -2,7 +2,7 @@ package by.valvik.musicadvisor.json;
 
 import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.domain.Items;
+import by.valvik.musicadvisor.domain.Response;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -28,7 +28,7 @@ public class JsonMapper {
 
     }
 
-    public <T extends Item> Items<T> toItems(JsonElement jsonElement, Type typeToken) {
+    public <T extends Item> Response<T> toItems(JsonElement jsonElement, Type typeToken) {
 
         return gson.fromJson(jsonElement,typeToken);
 

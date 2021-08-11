@@ -5,13 +5,13 @@ import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.constant.Direction;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.domain.Items;
-import by.valvik.musicadvisor.dto.BrowseItem;
+import by.valvik.musicadvisor.domain.Response;
+import by.valvik.musicadvisor.dto.ItemDto;
 import by.valvik.musicadvisor.exception.RepositoryException;
 import by.valvik.musicadvisor.exception.ServiceException;
 import by.valvik.musicadvisor.factory.Factory;
 import by.valvik.musicadvisor.context.holder.ContextHolder;
-import by.valvik.musicadvisor.repository.SpotifyRepository;
+import by.valvik.musicadvisor.repository.ResponseRepository;
 import by.valvik.musicadvisor.service.SpotifyService;
 import by.valvik.musicadvisor.tuple.Tuple;
 
@@ -36,7 +36,7 @@ public class DefaultSpotifyService implements SpotifyService {
     private static final String QUALIFIER_RESOURCE_FACTORY = "resourceFactory";
 
     @Inject
-    private SpotifyRepository repository;
+    private ResponseRepository repository;
 
     @Inject
     private ContextHolder contextHolder;
@@ -48,7 +48,7 @@ public class DefaultSpotifyService implements SpotifyService {
     private Factory<UserCommand, Tuple<String, String>> resourceFactory;
 
     @Override
-    public <T extends Item> BrowseItem getBrowseItem(UserCommand command, Class<T> entityClass) throws ServiceException {
+    public <T extends Item> ItemDto getItem(UserCommand command, Class<T> entityClass) throws ServiceException {
 
         Tuple<String, String> resources = resourceFactory.get(command);
 
@@ -58,11 +58,11 @@ public class DefaultSpotifyService implements SpotifyService {
 
         try {
 
-            Items<T> items = repository.getItems(url, resources.y(), typeToken);
+            Response<T> response = repository.getResponse(url, resources.y(), typeToken);
 
-            contextHolder.setItems(items);
+            contextHolder.setItems(response);
 
-            return toBrowseItem(items);
+            return toItemDto(response);
 
         } catch (RepositoryException e) {
 
@@ -78,13 +78,13 @@ public class DefaultSpotifyService implements SpotifyService {
 
         if (nonNull(direction)) {
 
-            Items<? extends Item> items = contextHolder.getItems();
+            Response<? extends Item> response = contextHolder.getItems();
 
             if (Objects.equals(direction, NEXT) ) {
 
-                if (nonNull(items) && nonNull(items.getNext())) {
+                if (nonNull(response) && nonNull(response.getNext())) {
 
-                    return items.getNext();
+                    return response.getNext();
 
                 } else {
 
@@ -96,9 +96,9 @@ public class DefaultSpotifyService implements SpotifyService {
 
             if (Objects.equals(direction, PREV)) {
 
-                if (nonNull(items) && nonNull(items.getPrevious())) {
+                if (nonNull(response) && nonNull(response.getPrevious())) {
 
-                    return items.getPrevious();
+                    return response.getPrevious();
 
                 } else {
 
@@ -121,7 +121,7 @@ public class DefaultSpotifyService implements SpotifyService {
 
     }
 
-    private <T extends Item> BrowseItem toBrowseItem(Items<T> items) {
+    private <T extends Item> ItemDto toItemDto(Response<T> response) {
 
         int limit = contextHolder.getItems().getLimit();
 
@@ -146,7 +146,7 @@ public class DefaultSpotifyService implements SpotifyService {
         int currentPage = offset / limit + 1;
 
 
-        return new BrowseItem(items.getItems(), totalPages, currentPage);
+        return new ItemDto(response.getItems(), totalPages, currentPage);
 
     }
 

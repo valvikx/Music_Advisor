@@ -7,7 +7,7 @@ import by.valvik.musicadvisor.tuple.Tuple;
 import by.valvik.musicadvisor.context.annotation.Configuration;
 import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.domain.Items;
+import by.valvik.musicadvisor.domain.Response;
 import by.valvik.musicadvisor.domain.album.Album;
 import by.valvik.musicadvisor.factory.Factory;
 import com.google.gson.reflect.TypeToken;
@@ -44,11 +44,11 @@ public class AppConfig {
 
 //        Factory<Class<? extends Item>, Type> factory = of();
 
-        factory.add(Album.class, new TypeToken<Items<Album>>() {}.getType());
+        factory.add(Album.class, new TypeToken<Response<Album>>() {}.getType());
 
-        factory.add(Category.class, new TypeToken<Items<Category>>() {}.getType());
+        factory.add(Category.class, new TypeToken<Response<Category>>() {}.getType());
 
-        factory.add(PlayList.class, new TypeToken<Items<PlayList>>() {}.getType());
+        factory.add(PlayList.class, new TypeToken<Response<PlayList>>() {}.getType());
 
         return factory;
 

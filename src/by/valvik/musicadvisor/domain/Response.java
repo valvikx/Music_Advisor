@@ -2,7 +2,7 @@ package by.valvik.musicadvisor.domain;
 
 import java.util.List;
 
-public class Items<T extends Item> {
+public class Response<T extends Item> {
 
     private List<T> items;
 
@@ -16,7 +16,7 @@ public class Items<T extends Item> {
 
     private Integer total;
 
-    public Items() {
+    public Response() {
 
     }
 

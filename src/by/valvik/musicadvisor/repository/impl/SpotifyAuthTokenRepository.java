@@ -2,28 +2,20 @@ package by.valvik.musicadvisor.repository.impl;
 
 import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.annotation.Singleton;
-import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.domain.Items;
-import by.valvik.musicadvisor.domain.error.RegularError;
+import by.valvik.musicadvisor.domain.error.AuthError;
+import by.valvik.musicadvisor.domain.auth.Token;
 import by.valvik.musicadvisor.exception.ConfigurationException;
 import by.valvik.musicadvisor.exception.RepositoryException;
 import by.valvik.musicadvisor.exception.UtilException;
-import by.valvik.musicadvisor.context.holder.ContextHolder;
 import by.valvik.musicadvisor.http.AppHttpClient;
 import by.valvik.musicadvisor.json.JsonHandler;
 import by.valvik.musicadvisor.json.JsonMapper;
-import by.valvik.musicadvisor.repository.SpotifyRepository;
-import com.google.gson.JsonObject;
-
-import java.lang.reflect.Type;
+import by.valvik.musicadvisor.repository.AuthTokenRepository;
 
 import static by.valvik.musicadvisor.constant.AppConstant.ERROR;
 
 @Singleton
-public class DefaultSpotifyRepository implements SpotifyRepository {
-
-    @Inject
-    private ContextHolder contextHolder;
+public class SpotifyAuthTokenRepository implements AuthTokenRepository {
 
     @Inject
     private AppHttpClient client;
@@ -35,13 +27,13 @@ public class DefaultSpotifyRepository implements SpotifyRepository {
     private JsonMapper jsonMapper;
 
     @Override
-    public <T extends Item> Items<T> getItems(String url, String itemsName, Type typeToken) throws RepositoryException {
+    public Token getToken(String url, String body) throws RepositoryException {
 
         String json;
 
         try {
 
-            json = client.performGet(url, contextHolder.getAuthHeader());
+            json = client.performPost(url, body);
 
         } catch (Exception e) {
 
@@ -51,9 +43,7 @@ public class DefaultSpotifyRepository implements SpotifyRepository {
 
         validate(json);
 
-        JsonObject jsonObject = jsonHandler.getJsonObject(itemsName);
-
-        return jsonMapper.toItems(jsonObject, typeToken);
+        return jsonMapper.toEntity(json, Token.class);
 
     }
 
@@ -63,12 +53,12 @@ public class DefaultSpotifyRepository implements SpotifyRepository {
 
             if (jsonHandler.buildDOM(json).hasMember(ERROR)) {
 
-                RegularError error = jsonMapper.toEntity(json, RegularError.class);
+                AuthError authError = jsonMapper.toEntity(json, AuthError.class);
 
-                throw new RepositoryException(error.getError().getMessage());
+                throw new RepositoryException(authError.getErrorDescription());
 
             }
-            
+
         } catch (UtilException e) {
 
             throw new RepositoryException(e.getMessage());

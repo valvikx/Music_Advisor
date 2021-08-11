@@ -4,6 +4,6 @@ import by.valvik.musicadvisor.domain.Item;
 
 import java.util.List;
 
-public record BrowseItem(List<? extends Item> items, int totalPages, int currentPage) {
+public record ItemDto(List<? extends Item> items, int totalPages, int currentPage) {
 
 }

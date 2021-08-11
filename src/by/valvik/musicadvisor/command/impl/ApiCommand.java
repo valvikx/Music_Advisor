@@ -4,7 +4,7 @@ import by.valvik.musicadvisor.command.Command;
 import by.valvik.musicadvisor.constant.Status;
 import by.valvik.musicadvisor.constant.UserCommand;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.dto.BrowseItem;
+import by.valvik.musicadvisor.dto.ItemDto;
 import by.valvik.musicadvisor.exception.ServiceException;
 import by.valvik.musicadvisor.service.SpotifyService;
 import by.valvik.musicadvisor.view.View;
@@ -42,9 +42,9 @@ public abstract class ApiCommand<T extends Item> implements Command {
 
         try {
 
-            BrowseItem browseItem = service.getBrowseItem(userCommand, entityClass);
+            ItemDto itemDto = service.getItem(userCommand, entityClass);
 
-            console.display(browseItem.items(), browseItem.currentPage(), browseItem.totalPages());
+            console.display(itemDto.items(), itemDto.currentPage(), itemDto.totalPages());
 
         } catch (ServiceException e) {
 

@@ -5,7 +5,7 @@ import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.auth.Token;
 import by.valvik.musicadvisor.exception.RepositoryException;
 import by.valvik.musicadvisor.exception.ServiceException;
-import by.valvik.musicadvisor.repository.AuthRepository;
+import by.valvik.musicadvisor.repository.AuthTokenRepository;
 import by.valvik.musicadvisor.service.AuthService;
 
 import static by.valvik.musicadvisor.constant.Delimiter.SPACE;
@@ -16,7 +16,7 @@ import static by.valvik.musicadvisor.util.Urls.getUrlToToken;
 public class SpotifyAuthService implements AuthService {
 
     @Inject
-    private AuthRepository repository;
+    private AuthTokenRepository repository;
 
     @Override
     public String getAuthHeader(String authCode) throws ServiceException {
