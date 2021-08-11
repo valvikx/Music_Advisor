@@ -28,7 +28,7 @@ public class JsonMapper {
 
     }
 
-    public <T extends Item> Response<T> toItems(JsonElement jsonElement, Type typeToken) {
+    public <T extends Item> Response<T> toResponse(JsonElement jsonElement, Type typeToken) {
 
         return gson.fromJson(jsonElement,typeToken);
 

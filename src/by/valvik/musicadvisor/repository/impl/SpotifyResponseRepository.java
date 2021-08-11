@@ -53,7 +53,7 @@ public class SpotifyResponseRepository implements ResponseRepository {
 
         JsonObject jsonObject = jsonHandler.getJsonObject(itemsName);
 
-        return jsonMapper.toItems(jsonObject, typeToken);
+        return jsonMapper.toResponse(jsonObject, typeToken);
 
     }
 
