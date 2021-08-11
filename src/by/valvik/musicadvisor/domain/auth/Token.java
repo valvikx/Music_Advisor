@@ -11,6 +11,7 @@ public class Token {
    private String refreshToken;
 
    public Token() {
+
    }
 
    public String getAccessToken() {

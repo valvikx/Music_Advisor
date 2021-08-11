@@ -12,7 +12,6 @@ public class Artist extends Item {
 
     public Artist() {
 
-
     }
 
     public Artist(String id, String name, ExternalUrls externalUrls) {

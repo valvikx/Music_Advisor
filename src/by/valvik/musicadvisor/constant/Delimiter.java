@@ -4,6 +4,7 @@ public enum Delimiter {
 
     SLASH("/"),
     QUESTION("?"),
+    EMPTY(""),
     SPACE(" "),
     EQUALS("="),
     AMPERSAND("&");
