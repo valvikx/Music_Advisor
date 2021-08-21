@@ -7,7 +7,6 @@ import java.util.List;
 
 import static by.valvik.musicadvisor.constant.Delimiter.EMPTY;
 import static by.valvik.musicadvisor.util.Props.getValue;
-import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class Album extends Item {
@@ -15,10 +14,6 @@ public class Album extends Item {
     private static final String KEY_ALBUM = "album";
 
     private List<Artist> artists;
-
-    public Album() {
-
-    }
 
     public Album(String id, String name, ExternalUrls externalUrls, List<Artist> artists) {
 
@@ -31,10 +26,11 @@ public class Album extends Item {
     @Override
     public String presentation() {
 
-        return format(getValue(KEY_ALBUM),
-                      getName(),
-                      getExternalUrls().getSpotify(),
-                      artists.stream().map(Artist::presentation).collect(joining(EMPTY.getSign())));
+        return getValue(KEY_ALBUM).formatted(getName(),
+                                             getExternalUrls().getSpotify(),
+                                             artists.stream()
+                                                    .map(Artist::presentation)
+                                                    .collect(joining(EMPTY.getSign())));
 
     }
 

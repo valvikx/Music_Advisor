@@ -4,10 +4,6 @@ public class ExternalUrls {
 
     private String spotify;
 
-    public ExternalUrls() {
-
-    }
-
     public String getSpotify() {
 
         return spotify;

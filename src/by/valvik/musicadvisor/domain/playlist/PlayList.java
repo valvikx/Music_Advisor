@@ -4,7 +4,6 @@ import by.valvik.musicadvisor.domain.ExternalUrls;
 import by.valvik.musicadvisor.domain.Item;
 
 import static by.valvik.musicadvisor.util.Props.getValue;
-import static java.lang.String.format;
 
 public class PlayList extends Item {
 
@@ -19,9 +18,8 @@ public class PlayList extends Item {
     @Override
     public String presentation() {
 
-        return format(getValue(KEY_PLAYLIST),
-                      getName(),
-                      getExternalUrls().getSpotify());
+        return getValue(KEY_PLAYLIST).formatted(getName(),
+                                                getExternalUrls().getSpotify());
 
     }
 

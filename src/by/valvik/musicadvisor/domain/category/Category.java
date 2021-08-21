@@ -2,9 +2,8 @@ package by.valvik.musicadvisor.domain.category;
 
 import by.valvik.musicadvisor.domain.ExternalUrls;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.util.Props;
 
-import static java.lang.String.format;
+import static by.valvik.musicadvisor.util.Props.getValue;
 
 public class Category extends Item {
 
@@ -19,7 +18,7 @@ public class Category extends Item {
     @Override
     public String presentation() {
 
-        return format(Props.getValue(KEY_CATEGORY), getName(), getId());
+        return getValue(KEY_CATEGORY).formatted(getName(), getId());
         
     }
 

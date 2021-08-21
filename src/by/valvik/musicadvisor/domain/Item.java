@@ -8,10 +8,6 @@ public abstract class Item {
 
     private ExternalUrls externalUrls;
 
-    public Item() {
-
-    }
-
     public Item(String id, String name, ExternalUrls externalUrls) {
 
         this.id = id;

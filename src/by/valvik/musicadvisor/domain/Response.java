@@ -16,10 +16,6 @@ public class Response<T extends Item> {
 
     private Integer total;
 
-    public Response() {
-
-    }
-
     public List<T> getItems() {
 
         return items;
