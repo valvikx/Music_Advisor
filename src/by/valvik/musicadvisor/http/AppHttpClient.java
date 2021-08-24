@@ -16,7 +16,7 @@ public class AppHttpClient {
 
     private static final String CONTENT_TYPE = "content-type";
 
-    private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
+    private static final String APPLICATION_X_WWW_FORM_URLENCODED = "application/first-www-form-urlencoded";
 
     private final HttpClient client;
 

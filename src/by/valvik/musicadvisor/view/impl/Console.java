@@ -3,11 +3,12 @@ package by.valvik.musicadvisor.view.impl;
 import by.valvik.musicadvisor.context.annotation.Inject;
 import by.valvik.musicadvisor.context.annotation.Singleton;
 import by.valvik.musicadvisor.domain.Item;
-import by.valvik.musicadvisor.util.Props;
 import by.valvik.musicadvisor.view.View;
 
 import java.util.List;
 import java.util.Scanner;
+
+import static by.valvik.musicadvisor.util.Props.getValue;
 
 @Singleton
 public class Console implements View {
@@ -20,32 +21,32 @@ public class Console implements View {
     private Scanner scanner;
 
     @Override
-    public void display(String message) {
+    public void displayln(String message) {
 
         System.out.println(message);
 
     }
 
     @Override
-    public void displayLine(String message) {
+    public void display(String message) {
 
         System.out.print(message);
 
     }
 
     @Override
-    public void display(String template, Object... arg) {
+    public void displayf(String template, Object... arg) {
 
         System.out.printf(template + "\n", arg);
 
     }
 
     @Override
-    public <T extends Item> void display(List<T> items, int currentPage, int totalPages) {
+    public <T extends Item> void displayList(List<T> items, int currentPage, int totalPages) {
 
-        display(Props.getValue(KEY_PAGE), currentPage, totalPages);
+        displayf(getValue(KEY_PAGE), currentPage, totalPages);
 
-        items.forEach(i -> display(i.presentation()));
+        items.forEach(i -> displayln(i.presentation()));
 
     }
 

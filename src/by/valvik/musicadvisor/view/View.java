@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface View {
 
+    void displayln(String message);
+
     void display(String message);
 
-    void displayLine(String message);
+    void displayf(String template, Object... arg);
 
-    void display(String template, Object... arg);
-
-    <T extends Item> void display(List<T> items, int currentPage, int totalPages);
+    <T extends Item> void displayList(List<T> items, int currentPage, int totalPages);
 
     String[] getArgs();
     

@@ -1,7 +1,6 @@
 package by.valvik.musicadvisor.util;
 
 import static by.valvik.musicadvisor.util.Props.getValue;
-import static java.lang.String.format;
 
 public final class Urls {
 
@@ -25,9 +24,7 @@ public final class Urls {
 
     public static String getUrlToAuthorize() {
 
-        return format(getValue(KEY_AUTHORIZE_URL),
-                      getValue(KEY_CLIENT_ID),
-                      getValue(KEY_REDIRECT_URI));
+        return getValue(KEY_AUTHORIZE_URL).formatted(getValue(KEY_CLIENT_ID), getValue(KEY_REDIRECT_URI));
 
     }
 
@@ -39,17 +36,16 @@ public final class Urls {
 
     public static String getBodyToAccessToken(String authCode) {
 
-        return format(getValue(KEY_TOKEN_BODY),
-                      authCode,
-                      getValue(KEY_REDIRECT_URI),
-                      getValue(KEY_CLIENT_ID),
-                      getValue(KEY_CLIENT_SECRET));
+        return getValue(KEY_TOKEN_BODY).formatted(authCode,
+                                                  getValue(KEY_REDIRECT_URI),
+                                                  getValue(KEY_CLIENT_ID),
+                                                  getValue(KEY_CLIENT_SECRET));
 
     }
 
     public static String getUrlTo(String resource, int limit) {
 
-        return format(getValue(KEY_BROWSE_API_URL), resource, limit);
+        return getValue(KEY_BROWSE_API_URL).formatted(resource, limit);
 
     }
 

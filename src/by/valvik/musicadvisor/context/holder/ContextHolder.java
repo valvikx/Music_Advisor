@@ -39,13 +39,13 @@ public class ContextHolder {
 
     }
 
-    public Response<? extends Item> getItems() {
+    public Response<? extends Item> getResponse() {
 
         return response;
 
     }
 
-    public void setItems(Response<? extends Item> response) {
+    public void setResponse(Response<? extends Item> response) {
 
         this.response = response;
 

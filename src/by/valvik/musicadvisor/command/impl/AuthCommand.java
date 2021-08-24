@@ -36,8 +36,6 @@ public class AuthCommand implements Command {
 
     private static final String KEY_CODE_RECEIVED = "code_received";
 
-    private static final String KEY_MAKING_HTTP_REQUEST = "making_http_request";
-
     @Inject
     private View console;
 
@@ -55,7 +53,7 @@ public class AuthCommand implements Command {
 
         if (nonNull(contextHolder.getAuthHeader())) {
 
-            console.display(getValue(KEY_ALREADY_LOGGED_IN));
+            console.displayln(getValue(KEY_ALREADY_LOGGED_IN));
 
             return BAD_REQUEST;
 
@@ -69,7 +67,7 @@ public class AuthCommand implements Command {
 
             String url = getUrlToAuthorize();
 
-            console.display(getValue(KEY_USE_LINK), url);
+            console.displayf(getValue(KEY_USE_LINK), url);
 
             server.stop();
 
@@ -77,7 +75,7 @@ public class AuthCommand implements Command {
 
             if (splintedQuery.isEmpty() || splintedQuery.containsKey(ERROR)) {
 
-                console.display(getValue(KEY_ACCESS_DENIED));
+                console.displayln(getValue(KEY_ACCESS_DENIED));
 
                 return BAD_REQUEST;
 
@@ -85,21 +83,19 @@ public class AuthCommand implements Command {
 
             String authCode = splintedQuery.get(KEY_CODE).get(0);
 
-            console.display(getValue(KEY_CODE_RECEIVED));
-
-            console.display(getValue(KEY_MAKING_HTTP_REQUEST));
+            console.displayln(getValue(KEY_CODE_RECEIVED));
 
             String authHeader = authService.getAuthHeader(authCode);
 
             contextHolder.setAuthHeader(authHeader);
 
-            console.display(getValue(KEY_SUCCESS));
+            console.displayln(getValue(KEY_SUCCESS));
 
         } catch (IOException | ServiceException e) {
 
             status = BAD_REQUEST;
 
-            console.display(e.getMessage());
+            console.displayln(e.getMessage());
 
         }
 

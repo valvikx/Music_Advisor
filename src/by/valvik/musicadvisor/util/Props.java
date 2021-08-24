@@ -15,7 +15,9 @@ public final class Props {
 
     private static final Properties PROPERTIES = new Properties();
 
-    private Props() {}
+    private Props() {
+
+    }
 
     static {
 

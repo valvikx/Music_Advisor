@@ -7,7 +7,7 @@ import static by.valvik.musicadvisor.util.Props.getValue;
 
 public class Artist extends Item {
 
-    private static final String ARTIST = "artist";
+    private static final String KEY_ARTIST = "artist";
 
     public Artist(String id, String name, ExternalUrls externalUrls) {
 
@@ -18,7 +18,7 @@ public class Artist extends Item {
     @Override
     public String presentation() {
 
-        return getValue(ARTIST).formatted(getName(), getExternalUrls().getSpotify());
+        return getValue(KEY_ARTIST).formatted(getName(), getExternalUrls().getSpotify());
 
     }
 

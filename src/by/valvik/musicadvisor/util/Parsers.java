@@ -24,7 +24,7 @@ public final class Parsers {
 
     private static final String ARG_LIMIT = "-limit";
 
-    private static final String KEY_INVALID_COMMAND_ARGUMENTS = "invalid_command_arguments";
+    private static final String KEY_INVALID_COMMAND_ARGUMENTS = "invalid_command_args";
 
     private Parsers() {}
 
@@ -38,13 +38,13 @@ public final class Parsers {
 
             Tuple<String, String> pair = splitQueryPair(query);
 
-            return of(pair.x(), singletonList(pair.y()));
+            return of(pair.first(), singletonList(pair.second()));
 
         }
 
         return Arrays.stream(query.split(AMPERSAND.getSign()))
                      .map(Parsers::splitQueryPair)
-                     .collect(groupingBy(Tuple::x, mapping(Tuple::y, toList())));
+                     .collect(groupingBy(Tuple::first, mapping(Tuple::second, toList())));
 
     }
 

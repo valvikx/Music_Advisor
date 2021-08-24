@@ -44,13 +44,13 @@ public abstract class ApiCommand<T extends Item> implements Command {
 
             ItemDto itemDto = service.getItem(userCommand, entityClass);
 
-            console.display(itemDto.items(), itemDto.currentPage(), itemDto.totalPages());
+            console.displayList(itemDto.items(), itemDto.currentPage(), itemDto.totalPages());
 
         } catch (ServiceException e) {
 
             status = BAD_REQUEST;
 
-            console.display(e.getMessage());
+            console.displayln(e.getMessage());
 
         }
 

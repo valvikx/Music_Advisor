@@ -12,7 +12,7 @@ import by.valvik.musicadvisor.view.View;
 import java.util.Objects;
 
 import static by.valvik.musicadvisor.constant.AppConstant.KEY_COMMAND_CANNOT_BE_EXECUTED;
-import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_ARGS;
+import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_ARGS_COMMAND;
 import static by.valvik.musicadvisor.constant.Status.BAD_REQUEST;
 import static by.valvik.musicadvisor.constant.Status.OK;
 import static by.valvik.musicadvisor.constant.UserCommand.AUTH;
@@ -22,14 +22,10 @@ import static by.valvik.musicadvisor.util.Props.getValue;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
-@Singleton(qualifier = COMMAND_QUALIFIER_ARGS)
+@Singleton(qualifier = QUALIFIER_ARGS_COMMAND)
 public class ArgsCommand implements Command {
 
-    private static final String KEY_ENTER_COMMAND = "enter_command";
-
-    private static final String KEY_AUTH_COMMANDS = "auth_commands";
-
-    private static final String KEY_MAIN_COMMANDS = "main_commands";
+    private static final String KEY_ENTER_COMMAND_ARGS = "enter_command_args";
 
     private static final String KEY_PROVIDE_ACCESS = "provide_access";
 
@@ -44,10 +40,7 @@ public class ArgsCommand implements Command {
     @Override
     public Status execute() {
 
-        console.display(getValue(KEY_ENTER_COMMAND));
-
-        console.displayLine(nonNull(contextHolder.getAuthHeader()) ? getValue(KEY_MAIN_COMMANDS)
-                                                                   : getValue(KEY_AUTH_COMMANDS));
+        console.display(getValue(KEY_ENTER_COMMAND_ARGS));
 
         Status status = OK;
 
@@ -67,7 +60,7 @@ public class ArgsCommand implements Command {
 
             if (Objects.equals(argsHolder.getUserCommand(), EXIT)) {
 
-                console.display(getValue(KEY_BYE));
+                console.displayln(getValue(KEY_BYE));
 
                 return status;
 
@@ -78,7 +71,7 @@ public class ArgsCommand implements Command {
             if ((Objects.equals(argsHolder.getUserCommand(), AUTH) || isNull(argsHolder.getUserCommand())) &&
                 nonNull(argsHolder.getDirection())) {
 
-                console.display(getValue(KEY_COMMAND_CANNOT_BE_EXECUTED));
+                console.displayln(getValue(KEY_COMMAND_CANNOT_BE_EXECUTED));
 
                 return BAD_REQUEST;
 
@@ -86,7 +79,7 @@ public class ArgsCommand implements Command {
 
             if (!Objects.equals(argsHolder.getUserCommand(), AUTH) && isNull(contextHolder.getAuthHeader())) {
 
-                console.display(getValue(KEY_PROVIDE_ACCESS));
+                console.displayln(getValue(KEY_PROVIDE_ACCESS));
 
                 return BAD_REQUEST;
 
@@ -96,7 +89,7 @@ public class ArgsCommand implements Command {
 
             status = BAD_REQUEST;
 
-            console.display(e.getMessage());
+            console.displayln(e.getMessage());
 
         }
 

@@ -10,8 +10,8 @@ import by.valvik.musicadvisor.context.holder.ContextHolder;
 
 import java.util.Objects;
 
-import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_ARGS;
-import static by.valvik.musicadvisor.constant.AppConstant.COMMAND_QUALIFIER_GREETING;
+import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_ARGS_COMMAND;
+import static by.valvik.musicadvisor.constant.AppConstant.QUALIFIER_START_COMMAND;
 import static by.valvik.musicadvisor.constant.Status.BAD_REQUEST;
 import static by.valvik.musicadvisor.constant.UserCommand.EXIT;
 
@@ -21,10 +21,10 @@ public class AppController {
     @Inject
     ApplicationContext context;
 
-    @Inject(qualifier = COMMAND_QUALIFIER_GREETING)
+    @Inject(qualifier = QUALIFIER_START_COMMAND)
     private Command greetingCommand;
 
-    @Inject(qualifier = COMMAND_QUALIFIER_ARGS)
+    @Inject(qualifier = QUALIFIER_ARGS_COMMAND)
     private Command argsCommand;
 
     @Inject
