@@ -55,7 +55,7 @@ public record SingletonScanner(Config config) {
                                return e.getValue().stream()
                                                   .map(m -> new SingletonDefinition(m.getName(),
                                                                                     m.getReturnType(),
-                                                                                   null,
+                                                                                    null,
                                                                                     new SingletonMethod(configObject, m, m.getParameters())));
 
 
@@ -108,7 +108,7 @@ public record SingletonScanner(Config config) {
                                    return new SingletonDefinition(qualifier.isEmpty() ? decapitalize(c.getSimpleName()) : qualifier,
                                                                   c,
                                                                   singletonCtor, 
-                                                                 null);
+                                                                  null);
 
                                })
                                .collect(toSet());

@@ -69,7 +69,7 @@ public class ArgsCommand implements Command {
             argsHolder = contextHolder.getArgsHolder();
 
             if ((Objects.equals(argsHolder.getUserCommand(), AUTH) || isNull(argsHolder.getUserCommand())) &&
-                nonNull(argsHolder.getDirection())) {
+                 nonNull(argsHolder.getDirection())) {
 
                 console.displayln(getValue(KEY_COMMAND_CANNOT_BE_EXECUTED));
 
