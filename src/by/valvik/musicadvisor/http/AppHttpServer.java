@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static by.valvik.musicadvisor.constant.AppConstant.KEY_CODE;
 import static by.valvik.musicadvisor.constant.Status.OK;
@@ -29,6 +30,8 @@ public class AppHttpServer {
     private static final int DELAY = 0;
 
     private static final int COUNT = 1;
+
+    private static final long TIMEOUT = 5L;
 
     private HttpServer server;
 
@@ -53,7 +56,7 @@ public class AppHttpServer {
                 query = httpExchange.getRequestURI().getQuery();
 
                 String response = query == null || !query.contains(KEY_CODE) ? getValue(KEY_CODE_NOT_FOUND)
-                        : getValue(KEY_GOT_CODE);
+                                                                             : getValue(KEY_GOT_CODE);
 
                 httpExchange.sendResponseHeaders(OK.getCode(), response.length());
 
@@ -81,11 +84,11 @@ public class AppHttpServer {
 
         try {
 
-            countDownLatch.await();
+            countDownLatch.await(TIMEOUT, SECONDS);
 
             executor.shutdown();
 
-            if (!executor.awaitTermination(1L, SECONDS)) {
+            if (!executor.awaitTermination(TIMEOUT, SECONDS)) {
 
                 executor.shutdown();
 
