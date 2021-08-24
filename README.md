@@ -14,4 +14,4 @@ Java SE 16.0.2
 2. Reflections 0.9.12
 3. Javassist 3.28.0-GA
 ## Credentials
-Replace `client_id` & `client_secret` in `application.properties` with your credentials
+Replace `client_id` & `client_secret` in `resources/application.properties` with your credentials
